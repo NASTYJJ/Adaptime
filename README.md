@@ -21,7 +21,7 @@ These flags are defined, and of course the names imply that the defaults are jus
 
 ## What are the alternatives?
 This kind of application recently became more popular, but the most famous one is
-![Google calendar](http://en.wikipedia.org/wiki/Google_Calendar)
+[Google calendar](http://en.wikipedia.org/wiki/Google_Calendar)
 
 ## An example
 Examples can be found in the tut (tutorial) folder.
