@@ -5,7 +5,7 @@ The purpose of Adaptime is to make a planner. The PlanCanvas is a generic DHTML 
 
 ## What does it do?
 The PlanCanvas let you make a canvas in which events can be added. These events in turn can be resized and moved to other time steps according to time snaps which can be set. Furthermore a type can be added to every event for convenience and there are different canvas lay-outs.
-![Canvas example](ps://github.com/https://github.com/NASTYJJ/Adaptime/canvas.png "Example of a simple canvas (grey) with events (orange)")
+![Canvas example](https://raw.github.com/NASTYJJ/Adaptime/507a7358dd70c2ce783ee1b5223f604af930f4b4/canvas.png "Example of a simple canvas (grey) with events (orange)")
 
 ## Is it good?
 PlanCanvas is lightweight and modular which is useful for small web applications or as part of a bigger application. The lay-out can be set in many ways so it can easily be adjusted to the design of a website or application.
