@@ -13,10 +13,15 @@ PlanCanvas is lightweight and modular which is useful for small web applications
 These flags are defined, and of course the names imply that the defaults are just the opposite:
 
 *PlanCanvas.FLAG_VERTICAL=0x01, makes the orientation of the plancanvas vertical (outlook style) instead of the default horizontal.
+
 *PlanCanvas.FLAG_NOMOVE =0x02, disables movement of appointments within the canvas by the user.
+
 *PlanCanvas.FLAG_NOCREATE=0x04, disables creation of new appointments on the canvas.
+
 *PlanCanvas.FLAG_NOCROSS =0x08, disables moving appointments to other plancanvas's. This disables both dragging from AND to the plancanvas.
+
 *PlanCanvas.FLAG_OVERLAP =0x10, allow overlapping appointments. By default if you do an action that results in overlapping appointments, that acton is reverted.
+
 *PlanCanvas.FLAG_NORESIZE =0x20, allow movement of appointments but not resize.
 
 ## What are the alternatives?
