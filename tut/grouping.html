@@ -1,0 +1,155 @@
+<html>
+<link rel="icon" href="favicon.ico"> 
+<link rel="stylesheet" type="text/css" href="style.css" id="feyenoord_ss"/>
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script lang="javascript">
+function main()
+{
+}
+</script>
+</head>
+
+<body onload="main()">
+
+<h1>Grouping</h1>
+
+Grouping in ask was until recently implemented as a tree, but multiple parents is something that occurs frequently so a graph is a better solution. The main aim here is to come up with a database format but of course the same structure can be reflected in core structures as well. And since the edges in the graph mostly reflect a relation between two nodes, it should be a directed graph.
+
+The simplest model for this is in my opinion the next database table:
+
+<pre>
+CREATE TABLE `grouping` (
+`group` VARCHAR( 256 ) NOT NULL ,
+`member` VARCHAR( 256 ) NOT NULL ,
+`relation' VARCHAR( 256 ) NULL,
+INDEX ( `group` , `member` )
+) ENGINE = MYISAM ;
+</pre>
+
+Parents and children usually build a tree, su group and member is more natural.
+ In ask the id of table rows is INT(11) but i have a couple of objections:
+First it limits the key too much, not only to a integer but also in size. By using a string you can still us string representations of integers, but you can now also use the relation directly like "is parent of" or use it to contain urls etc. And if you really want more elaborate data, you should use the relation as a key to data found somewhere else. Some might argue that 256 is actually too much space to allocate but than again it is a VARCHAR in mysql which is stored very space efficient and should be represented in any other language as a variable size string with a maximum of 256 if possible.
+
+An example, the next family graph :
+
+<pre>
+            +-------+
+        +---|  jan  |---+
+        |   +-------+   | 
+        |               | 
+        V               v
+    +-------+------>+-------+
+    |  dik  |<------|  els  |
+    +-------+       +-------+ 
+</pre>
+
+Could be represented by the following table :
+
+<table border=1>
+<tr style="background: #999999;">
+<td>group<td>member<td>relation
+<tr><td>jan<td>dik<td>is parent of
+<tr><td>jan<td>els<td>is parent of
+<tr><td>dik<td>els<td>is brother of
+<tr><td>els<td>dik<td>is sister of
+</table>
+
+Of course "is child of" could also be added to make all links bidirectional, but lets keep the table small. In this scheme there is also no problem adding more relations like both "is daghter of " and "is child of", just add a new row.
+
+<h2>in core structure</h2>
+
+The data structure as it is stored in the database is actually pretty efficient when sorted on the group column if it is for retrieval only. There is a trade off between retrieval efficiency and update efficiency when choosing between data structures, for instance an in-core graph with pointers will be better for adding and deleting nodes, but horrible to retrieve the complete list or search for a particular node. 
+Since mostly whenever a change is made it should be reflected in other places as well (databases, other agents) there will be a very costly communication action involved making the in-core update rather insignificant. So i think retrieval should be the focal point.
+
+An optional more space-efficient storage may be the one borrowed from the and network library, where the nodes and edges are kept in separate arrays. Both use indices in the other to find the first edge, and the to node. The above graph would look like this :
+
+<table border=1>
+<tr style="background: #999999;"><td>node data<td>first edge
+<tr><td>jan<td>0
+<tr><td>dik<td>2
+<tr><td>els<td>3
+</table>
+
+<table border=1>
+<tr style="background: #999999;"><td>edge data<td>to node
+<tr><td>parent of<td>1
+<tr><td>parent of<td>2
+<tr><td>brother of<td>2
+<tr><td>sister of<td>1
+</table>
+
+Since everything is done with array indices, retrieval is very fast as well, while still all data is retained in the two arrays. Of course updates are costly since a complete set of indices has to be altered.
+
+So for instance the first edge of dik starts at index 2 in the edge table ("brother of", 2). And the 2 is an index back into the node table, which is "els".
+Both arrays must be strictly sorted, so you can see how many edges a node has by looking at the first edge of the next node : so jan has two edges because the first node of 'dik' (2) - the first one of jan (0) is 2.
+
+This becomes more space efficient when more edges are used, if integers and pointers are used and N and E are the numbers of nodes and edges, method one used (E*12) bytes and method two (N*8)+(E*8) bytes.
+
+<h2>operations</h2>
+
+To use this datamodel, a basic set of operations is needed to use them. The next subchapters will discuss them. The language used will be javascript, so here is the datastructure itself :
+
+<pre>
+function group(group,member,relation)
+{
+    this.group=group;
+    this.member=member;
+    this.relation=relation;
+}
+
+function groups(n)
+{
+    var data = new Array(n);
+
+    ..
+}
+</pre>
+
+The examples below will use this randomly generated data :
+
+<div id="out"></div>
+
+<h3>traverse all nodes</h3>
+
+Since it is simply an array these functions will suffice:
+
+<pre>
+var grps = new groups();
+
+/* fill groups */
+
+var cnt = grps.get_num_groups();
+var grp = grps.get_groups();
+
+/* traversal : */
+
+for (g=0; g< cnt; g++) {
+    // use grp[g];
+}
+</pre>
+<div id="traversal"></div>
+
+<h3>get all submembers</h3>
+
+Here is the implementation of the function get_submembers.
+
+<pre>
+    this.get_submembers=function(elm) {
+        var result=new Array();
+        var p = binsrc(this.data,elm,g_cmp);
+        if (p < 0) return result;
+        result[result.length] = this.data[p++];
+        while (g_cmp(elm,this.data[p])==0)
+        {
+            result[result.length] = this.data[p++];
+        }
+        return result;
+    }
+</pre>
+
+This table dumps all submembers of the first group in the list.
+
+<div id="submembers"></div>
+
+</html>

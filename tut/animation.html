@@ -1,0 +1,83 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../style/default/style.css" id="feyenoord_ss"/>
+
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script language="javascript">
+
+var FACTOR=1000;
+
+// reusable variables
+var ddc = new DragDropContext();
+
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+function plain_move(app, val)
+{
+    //app.move(val);
+	dom_set_left (app.domelm,val);
+}
+
+function move_app(app, val)
+{
+    //dp(val);
+    app.move(val);
+	//dom_set_left (app.domelm,val);
+}
+
+function resize_app(app, val)
+{
+    app.resize(val);
+	//dom_set_left (app.domelm,val);
+}
+
+function fade_app(app, val)
+{
+    //dp(val);
+	global.browser.set_opacity (app.domelm,val/100);
+}
+
+function main()
+{
+	var d=document.getElementById("anim1");
+	var dbg=document.getElementById("anim2");
+    var cl_b = new CanvasLayout(1800*FACTOR,"flatstyle");
+    
+    global.debug = new Debug(dbg);
+
+    var t1 = new AppType(-1,"doing nothing",null,"nothing");
+    var t2 = new AppType(-1,"being free",null,"free");
+    var t3 = new AppType(-1,"kinda busy",null,"busy");
+    
+    var types = [ t1, t2, t3 ];
+
+    start = last_midnight();
+    end = start + 24 * 3600*FACTOR;
+    var pc1 = new PlanCanvas(d,start,end,cl_b,ignore,types,ddc);
+	var l   = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+
+    var app = new Appointment(pc1, start, start+3600*FACTOR, types[0], "id1");
+
+    var a1  = new Animation(move_app,app,  start+12*3600*FACTOR, start, 13000.0, new BounceEffect());
+    var a2  = new Animation(fade_app,app,  0,  100, 3000.0);
+    var a3  = new Animation(resize_app,app,3600*FACTOR, 4*3600*FACTOR,       6000.0);
+    a1.go();
+    a2.go();
+    a3.go();
+
+	pc1.set_legend(l);
+	var dj = new DomJiskefet(document.body,null);
+}
+
+
+</script>
+</head>
+<body onload="main()">
+
+<div id="anim1"></div>
+<div id="anim2"></div>
+
+</html>

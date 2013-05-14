@@ -1,0 +1,137 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../style/default/style.css" id="feyenoord_ss"/>
+
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script language="javascript">
+
+// reusable variables
+var ddc = new DragDropContext();
+
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+// switched to milliseconds
+var FACTOR=1000;
+
+function my_timefunc(t)
+{
+	var d = new Date(t);
+	h = d.getHours();
+
+	return h;
+}
+
+
+function main()
+{
+	var d=document.getElementById("d1");
+	var dbg=document.getElementById("d2");
+
+	global.debug = new Debug(dbg);
+
+    var cl_b = new CanvasLayout(1800*FACTOR,"brownstyle");
+    var cl_g = new CanvasLayout(3600*FACTOR,"greenstyle");
+
+    var t1 = new AppType(-1,"doing nothing","#777777");
+    var t2 = new AppType(-1,"being free","green");
+    var t3 = new AppType(-1,"kinda busy","red");
+    
+    var types = [ t1, t2, t3 ];
+    var start = last_midnight();
+
+    cl_b.add_timelines(start-3600*FACTOR,3600*FACTOR,3600*FACTOR,1,"hourlines");
+    cl_b.add_timelines(start-1800*FACTOR,1800*FACTOR,3600*FACTOR,0,"halfhours");
+    cl_b.set_timefunc(my_timefunc);
+    cl_g.add_timelines(start,24*3600*FACTOR,48*3600*FACTOR,1,"daylines");
+    cl_g.add_timelines(start+24*3600*FACTOR,24*3600*FACTOR,48*3600*FACTOR,1,"daylines2");
+
+    // day
+    var pc1 = new PlanCanvas(d,start,start+ 1*24*3600*FACTOR,cl_b,ignore,types,ddc);
+    // week 
+    var pc2 = new PlanCanvas(d,start,start + 7*24*3600*FACTOR,cl_g,ignore,types,ddc);
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+
+
+	pc1.id="brown plancanvas";
+	pc2.id="green plancanvas";
+	pc1.set_legend(l);
+	pc2.set_legend(l);
+}
+
+</script>
+</head>
+
+<body onload="main()">
+<div id="d1"></div>
+<div id="d2"></div>
+
+This example is made with four seperate timelines, the hourline on top is built from one timeline that draws the hourlines and the number, and one with a small 'half-hour' line.
+The Dayline at the bottom is built up from a brown timeline that repeats every other day and one red one that repeats every two days as well, but which is  shifted one day, which makes them alternate.
+<br>
+Also note the effect of using percentages for coordinates, when you resize the browser horiziontally everything follows.
+
+The code :
+
+<pre>
+// reusable variables
+var ddc = new DragDropContext();
+
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+// switched to milliseconds
+var FACTOR=1000;
+
+function my_timefunc(t)
+{
+    var d = new Date(t);
+    h = d.getHours();
+
+    return h;
+}
+
+
+function main()
+{
+    var d=document.getElementById("d1");
+    var dbg=document.getElementById("d2");
+
+    global.debug = new Debug(dbg);
+
+    var cl_b = new CanvasLayout(1800*FACTOR,"brownstyle");
+    var cl_g = new CanvasLayout(3600*FACTOR,"greenstyle");
+
+    var t1 = new AppType(-1,"doing nothing","#777777");
+    var t2 = new AppType(-1,"being free","green");
+    var t3 = new AppType(-1,"kinda busy","red");
+    
+    var types = [ t1, t2, t3 ];
+    var start = last_midnight();
+
+    cl_b.add_timelines(start-3600*FACTOR,3600*FACTOR,3600*FACTOR,1,"hourlines");
+    cl_b.add_timelines(start-1800*FACTOR,1800*FACTOR,3600*FACTOR,0,"halfhours");
+    cl_b.set_timefunc(my_timefunc);
+    cl_g.add_timelines(start,24*3600*FACTOR,48*3600*FACTOR,1,"daylines");
+    cl_g.add_timelines(start+24*3600*FACTOR,24*3600*FACTOR,48*3600*FACTOR,1,"daylines2");
+
+    // day
+    var pc1 = new PlanCanvas(d,start,start+ 1*24*3600*FACTOR,cl_b,ignore,types,ddc);
+    // week 
+    var pc2 = new PlanCanvas(d,start,start + 7*24*3600*FACTOR,cl_g,ignore,types,ddc);
+    var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+
+
+    pc1.id="brown plancanvas";
+    pc2.id="green plancanvas";
+    pc1.set_legend(l);
+    pc2.set_legend(l);
+}
+</pre>
+
+</body>
+</html>

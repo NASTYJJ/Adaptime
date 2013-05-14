@@ -1,0 +1,166 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../style/default/style.css" id="feyenoord_ss"/>
+
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script language="javascript">
+
+// reusable variables
+var ddc = new DragDropContext();
+
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+function main()
+{
+	var o6=document.getElementById("o6");
+	var o7=document.getElementById("o7");
+	var o8=document.getElementById("o8");
+	var o9=document.getElementById("o9");
+	var d=document.getElementById("o11");
+	var o10=document.getElementById("o10");
+    var cl_b = new CanvasLayout(1800,"brownstyle");
+    var cl_g = new CanvasLayout(1800,"greenstyle");
+    var cl_r = new CanvasLayout(1800,"redstyle");
+    var cl_y = new CanvasLayout(1800,"yellowstyle");
+
+    var t1 = new AppType(-1,"doing nothing","#777777",null,0.9,true);
+    var t2 = new AppType(-1,"being free","green",null,0.9,true);
+    var t3 = new AppType(-1,"kinda busy","red",null,0.9,true);
+
+	global.debug = new Debug(o10);
+    
+    var types = [ t1, t2, t3 ];
+
+    start = last_midnight();
+    end = next_midnight();
+	var opts = PlanCanvas.FLAG_VERTICAL;
+    var pc1 = new PlanCanvas(o6,start,end,cl_b,ignore,types,ddc,opts);
+    var pc2 = new PlanCanvas(o7,start,end,cl_g,ignore,types,ddc,opts | PlanCanvas.FLAG_OVERLAP);
+    var pc3 = new PlanCanvas(o8,start,end,cl_r,ignore,types,ddc, PlanCanvas.FLAG_NOCROSS | PlanCanvas.FLAG_NOAPPCM);
+    var pc4 = new PlanCanvas(o9,start,end,cl_y,ignore,types,ddc, PlanCanvas.FLAG_NOCREATE | PlanCanvas.FLAG_NORESIZE);
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+
+	pc4.set_text("the yellow one");
+	pc1.id="vertical plancanvas";
+	pc1.set_legend(l);
+	pc2.id="vertical plancanvas 2";
+	pc2.set_legend(l);
+	pc3.id="horizontal plancanvas";
+	pc3.set_legend(l);
+	pc4.id="horizontal plancanvas 2";
+	pc4.set_legend(l);
+
+    pc1.resize(200,400);
+    pc2.resize(200,400);
+    pc3.resize(400,300);
+    pc4.resize(400,200);
+}
+
+</script>
+</head>
+<body onload="main()">
+
+IE (7 only ?) does not work well with this demo, work is in progress to see why
+
+<table>
+<tr>
+<td rowspan=2>
+<div id="o6" style="width:200; height:400;"></div>
+</td>
+<td rowspan=2>
+<div id="o7" style="width:200; height:400;"></div>
+</td>
+<td>
+<div id="o8" style="width:400; height:200;"></div>
+</td>
+<tr>
+<td>
+<div id="o9" style="width:400; height:200;"></div>
+</td>
+<tr>
+<td id="o11" colspan=3></td>
+<tr>
+<td id="o10" colspan=3>debug</td>
+</table>
+
+I incorporated some of the current option flags here :
+
+<ul>
+<li>the brown and green PlanCanvas have FLAG_VERTICAL set
+<li>the green PlanCanvas allows overlap FLAG_OVERLAP 
+<li>the red PlanCanvas disallows moving between canvases with FLAG_NOCROSS
+<li>the yellow PlanCanvas disallows creation of new apps with FLAG_NOCREATE
+</ul>
+
+The code, first the table that contains all dom elements:
+
+<pre>
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td id="o6" rowspan=2&gt;&lt;/td&gt;
+&lt;td id="o7" rowspan=2&gt;&lt;/td&gt;
+&lt;td id="o8"&gt;&lt;/td&gt;
+&lt;tr&gt;
+&lt;td id="o9"&gt;&lt;/td&gt;
+&lt;tr&gt;
+&lt;td id="o11" colspan=3&gt;&lt;/td&gt;
+&lt;tr&gt;
+&lt;td id="o10" colspan=3&gt;debug&lt;/td&gt;
+&lt;/table&gt;
+</pre>
+
+And the javascript code 
+
+<pre>
+function main()
+{
+	var o6=document.getElementById("o6");
+	var o7=document.getElementById("o7");
+	var o8=document.getElementById("o8");
+	var o9=document.getElementById("o9");
+	var d=document.getElementById("o11");
+	var o10=document.getElementById("o10");
+
+    var cl_b = new CanvasLayout(1800,"brownstyle");
+    var cl_g = new CanvasLayout(1800,"greenstyle");
+    var cl_r = new CanvasLayout(1800,"redstyle");
+    var cl_y = new CanvasLayout(1800,"yellowstyle");
+
+    var t1 = new AppType(-1,"doing nothing","#777777",null,0.9,true);
+    var t2 = new AppType(-1,"being free","green",null,0.9,true);
+    var t3 = new AppType(-1,"kinda busy","red",null,0.9,true);
+
+	global.debug = new Debug(o10);
+    
+    var types = [ t1, t2, t3 ];
+
+    start = last_midnight();
+    end = next_midnight();
+	var opts = PlanCanvas.FLAG_VERTICAL;
+    var pc1 = new PlanCanvas(o6,start,end,cl_b,ignore,types,ddc,opts);
+    var pc2 = new PlanCanvas(o7,start,end,cl_g,ignore,types,ddc,opts | PlanCanvas.FLAG_OVERLAP);
+    var pc3 = new PlanCanvas(o8,start,end,cl_r,ignore,types,ddc, PlanCanvas.FLAG_NOCROSS | PlanCanvas.FLAG_NOAPPCM);
+    var pc4 = new PlanCanvas(o9,start,end,cl_y,ignore,types,ddc, PlanCanvas.FLAG_NOCREATE | PlanCanvas.FLAG_NORESIZE);
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+
+	pc4.set_text("the yellow one");
+	pc1.id="vertical plancanvas";
+	pc1.set_legend(l);
+	pc2.id="vertical plancanvas 2";
+	pc2.set_legend(l);
+	pc3.id="horizontal plancanvas";
+	pc3.set_legend(l);
+	pc4.id="horizontal plancanvas 2";
+	pc4.set_legend(l);
+
+    pc1.resize(200,400);
+    pc2.resize(200,400);
+    pc3.resize(400,200);
+    pc4.resize(400,200);
+}
+</pre>
+
+</html>

@@ -1,0 +1,835 @@
+<html>
+<link rel="icon" href="favicon.ico"> 
+<link rel="stylesheet" type="text/css" href="style.css" id="feyenoord_ss"/>
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script lang="javascript">
+var t1 = new AppType(-1,"doing nothing","#777777");
+var t2 = new AppType(-1,"being free","green");
+var t3 = new AppType(-1,"kinda busy","red");
+var types = [ t1, t2, t3 ];
+
+var cl_b = new CanvasLayout(1800,"brownstyle");
+var cl_hh = new CanvasLayout(1800,"bluestyle");
+var cl_day = new CanvasLayout(24*3600*1000,"brownstyle");
+
+function Graph(groupdata)
+{
+    this.nodes = new Array();
+    this.edges = new Array();
+
+    this.set_data=function(data)
+    {
+        groupdata.sort(groupcmp);
+
+        var lastnode=null;
+        for (d in data) {
+            if (d != lastnode) {
+                var nix = this.nodes.length;
+                this.nodes[nix] = d;
+            }
+        }
+    }
+
+    if (groupdata) this.set_data(groupdata);
+}
+
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+function group(group,member,relation)
+{
+    this.group=group;
+    this.member=member;
+    this.relation=relation;
+}
+
+function intrand(n)
+{
+    return Math.floor(Math.random() * n);
+}
+
+function binsrc(data,item,cmp)
+{
+  var left = -1,
+      right = data.length,
+      mid;
+
+  while(right - left > 1)
+  {
+    mid = (left + right) >>> 1;
+    if(cmp(data[mid] , item)<0)
+      left = mid;
+    else
+      right = mid;
+  }
+
+  if(right < data.length && cmp(data[right] , item) != 0)
+    return -(right);
+
+  return right;
+}
+
+function g_cmp(a,b)
+{
+    if (a.group < b.group) return -1;
+    if (a.group > b.group) return  1;
+    return 0;
+}
+
+function groupcmp(a,b)
+{
+    //alert(a.group + " and " +  b.group);
+    if (a.group < b.group) return -1;
+    if (a.group > b.group) return  1;
+    if (a.member < b.member) return -1;
+    if (a.member > b.member) return  1;
+    if (a.relation < b.relation) return -1;
+    if (a.relation > b.relation) return  1;
+    return 0;
+}
+
+function groups(n)
+{
+    var self=this;
+    this.data = new Array(n);
+
+    this.sort = function()
+    {
+        this.data.sort(groupcmp);
+    }
+
+    this.get_pos=function(elm)
+    {
+        var p = binsrc(this.data,elm,groupcmp);
+        if (p < 0) return -p;
+        return p;
+    }
+
+    this.get_num_groups=function() { return self.data.length; }
+    this.get_groups=function() { return self.data; }
+
+    this.get_submembers=function(elm) {
+        var result=new Array();
+        var p = binsrc(this.data,elm,g_cmp);
+        if (p < 0) return result;
+        result[result.length] = this.data[p++];
+        while (g_cmp(elm,this.data[p])==0)
+        {
+            result[result.length] = this.data[p++];
+        }
+        return result;
+    }
+
+    this.add_group = function(grp){
+        var pos = this.get_pos(grp);
+        this.data.splice(pos,0,grp);
+    }
+
+    this.set_group = function(pos,grp)
+    {
+        this.data[pos] = grp;
+    }
+    /** 
+     * generate dump table,  
+     * @param {Object} what What object to dump
+     * @return {Object} dom table with the object in two columns (name,val)
+     * @see Debug#print_attributes
+     */
+	this.mk_table = function (dta)
+	{
+		tbl = document.createElement("table");
+		// opera needs this to be 0
+		tbl.cellSpacing = 1;
+		tbl.border=0;
+		tbl.bgColor="000000";
+
+		if (!dta) {
+			tr = tbl.insertRow(tbl.rows.length);
+			td = tr.insertCell(0);
+			td.nowrap = true;
+			td.innerHTML = dta;
+			return tbl;
+		}
+
+		for (var b in dta)
+		{
+            a = dta[b];
+			tr = tbl.insertRow(tbl.rows.length);
+			tr.bgColor="eeeeee";
+			td = tr.insertCell(0);
+			td.nowrap = true;
+			td.innerHTML = a.group;
+			td = tr.insertCell(1);
+			td.nowrap = true;
+			td.innerHTML = a.member;
+			td = tr.insertCell(2);
+			td.nowrap = true;
+			td.innerHTML = a.relation;
+		}
+		tr = tbl.insertRow(0);
+		td = tr.insertCell(0);
+		td.style.background="#888888"; // rather neutral header
+		td.innerHTML = "group";
+		td = tr.insertCell(1);
+		td.style.background="#888888"; // rather neutral header
+		td.innerHTML = "member";
+		td = tr.insertCell(2);
+		td.style.background="#888888"; // rather neutral header
+		td.innerHTML = "relation";
+
+		return tbl;
+	}
+
+    this.dmp=function(where,what)
+    {
+        if (!what) what=this.data;
+        var t = this.mk_table(what);
+        where.appendChild(t);
+    }
+}
+
+function test()
+{
+    var a = ["var myfn = function () { "];
+    for (var i = 0; i < 50; i++)
+        a.push("return function () { ");
+        a.push("return null;");
+        for (var i = 0; i < 50; i++)
+            a.push(" };");
+            a.push("}; myfn");
+            var makeFn = eval(a.join(""));
+            var f;
+}
+
+function randomtext()
+{
+    var str="";
+    var i;
+    var n = Math.floor(Math.random() * 10);
+    n=4;
+
+    for (i=0; i< n; i++) {
+        var x = Math.floor(Math.random() * 10);
+        str = str.concat(x.toString());
+    }
+
+    return str;
+}
+
+function speedtest(g)
+{
+    var i;
+
+    for (i=0; i< 1000; i++) {
+        var gr = randomtext();
+        var m = randomtext();
+        var r = randomtext();
+
+        g.set_group(i,new group(gr,m,r));
+    }
+    g.sort();
+}
+
+var ngrp = Math.floor(Math.random() * 5) + 3;
+var groupdata = new Array(ngrp);
+var nrel = Math.floor(Math.random() * 5) + 3;
+var reldata = new Array(nrel);
+
+function speedtest2(g)
+{
+    var i;
+
+    for (i=0; i< ngrp; i++) {
+        groupdata[i]=randomtext();
+    }
+    for (i=0; i< nrel; i++) {
+        reldata[i]=randomtext();
+    }
+
+    for (i=0; i< 10; i++) {
+        gr = groupdata[intrand(ngrp-1)];
+        m = groupdata[intrand(ngrp-1)];
+        r = reldata[intrand(nrel-1)];
+
+        var grp = new group(gr,m,r);
+        g.add_group(grp);
+    }
+    g.dmp(out);
+
+    var g2 = new Graph(g);
+
+    g2.dmp();
+}
+
+function traverse(g)
+{
+    var cnt = g.get_num_groups();
+    var grp = g.get_groups();
+
+    var trav=document.getElementById("traversal");
+
+    g.dmp(trav,grp);
+}
+
+function submembers(g)
+{
+    var cnt = g.get_num_groups();
+    var grp = g.get_groups();
+    var sub = g.get_submembers(grp[0]);
+
+    var trav=document.getElementById("submembers");
+
+    g.dmp(trav,sub);
+}
+
+
+function simple_date()
+{
+    var start = Date.parse("Feb 5,2007 00:00")/1000;
+    var end   = Date.parse("Feb 6,2007 00:00")/1000;
+    var tw_start = Date.parse("Feb 5,2007 09:00")/1000;
+    var tw_end   = Date.parse("Feb 5,2007 13:30")/1000;
+
+    var out = document.getElementById("simple_date");
+    var tw = new TimeWindow(tw_start, tw_end);
+    var tw2 = new TimeWindow(start, end);
+
+    var pc1 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    pc1.set_tw(tw2);
+    pc1.resize(800,100);
+
+    var app = new Appointment(pc1, 0,0 , types[0], "id1");
+    app.set_tw(tw);
+}
+
+function less_simple_date()
+{
+    var start = Date.parse("Feb 5,2007 00:00")/1000;
+    var end   = Date.parse("Feb 6,2007 00:00")/1000;
+    var tw_start = Date.parse("Feb 5,2007 09:00")/1000;
+    var tw_end   = Date.parse("Feb 5,2007 13:30")/1000;
+
+    var out = document.getElementById("less_simple_date");
+    var tw = new TimeWindow(tw_start, tw_end);
+    var tw2 = new TimeWindow(start, end);
+
+    var pc1 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    pc1.set_tw(tw2);
+    pc1.resize(800,100);
+
+    var i = new Interval(0,60*60); // milliseconds !
+    var tw = new TimeWindow(45*60,60*60);
+    var tp = new TimePattern(tw,i);
+    //var tp = new NotPattern(tp2);
+
+    var start = Date.parse("Feb 5,2007 00:00")/1000;
+    var stop   = Date.parse("Feb 6,2007 00:00")/1000;
+
+    var valid = tp.valid(start);
+    if (!valid) { 
+        start = tp.next_start(start);
+    }
+    end = tp.next_end(start);
+    while (start < stop) {
+        var app = new Appointment(pc1, 0,0 , types[0], "id1");
+        tw = new TimeWindow(start,end);
+        app.set_tw(tw);
+        start = tp.next_start(end);
+        end = tp.next_end(start);
+    }
+}
+
+function negate()
+{
+    var start = Date.parse("Jan 1,2007 00:00");
+    var stop  = Date.parse("Jan 1,2008 00:00");
+
+    var out = document.getElementById("negate");
+    var tw2 = new TimeWindow(start, stop);
+
+    var pc1 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    pc1.set_tw(tw2);
+    pc1.resize(800,100);
+
+    var i = new MonthInterval(); 
+    var tw = new TimeWindow(0,28*24*60*60*1000-1);
+    var tp = new NotPattern(new TimePattern(tw,i));
+
+    var valid = tp.valid(start);
+    if (valid) { 
+        start = tp.next_start(start);
+    }
+    end = tp.next_end(start);
+    while (start < stop) {
+        var app = new Appointment(pc1,0,0,types[0],"id1");
+        tw = new TimeWindow(start,end);
+        app.set_tw(tw);
+        start = tp.next_start(end);
+        end = tp.next_end(start);
+    }
+}
+
+function fill(start,stop,pc,tp)
+{
+    var valid = tp.valid(start);
+    if (!valid) { 
+        start = tp.next_start(start);
+    }
+    end = tp.next_end(start);
+    while (start < stop) {
+        var app = new Appointment(pc,0,0,types[0],"id1");
+        tw = new TimeWindow(start,end);
+        app.set_tw(tw);
+        start = tp.next_start(end);
+        end = tp.next_end(start);
+    }
+}
+
+function exampl1()
+{
+    var start = Date.parse("Jan 1,2007 00:00");
+    var stop  = Date.parse("Jan 1,2008 00:00");
+
+    var out = document.getElementById("exampl1");
+    var tw2 = new TimeWindow(start, stop);
+
+    var pc1 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    var pc2 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    var pc3 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    var pc4 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    pc1.set_tw(tw2);
+    pc1.resize(800,100);
+    pc2.set_tw(tw2);
+    pc2.resize(800,100);
+    pc3.set_tw(tw2);
+    pc3.resize(800,100);
+    pc4.set_tw(tw2);
+    pc4.resize(800,100);
+
+    var month = new MonthInterval(); 
+    var tenth = new TimeWindow(9*24*60*60*1000, 10*24*60*60*1000-1);
+    var weekend = new TimeWindow(2*24*60*60*1000, 4*24*60*60*1000-1);
+    var weekdays = new Interval(0*24*60*60*1000, 7*24*60*60*1000);
+
+    var tp1 = new TimePattern(tenth,month);
+    var tp2 = new TimePattern(weekend,weekdays);
+
+    var noweekend = new NotPattern(tp2);
+
+    var tpa = new AndPattern(tp1,noweekend);
+
+    fill(start,stop,pc1,tp1);
+    fill(start,stop,pc2,tp2);
+    fill(start,stop,pc3,noweekend);
+    fill(start,stop,pc4,tpa);
+
+}
+
+function exampl2()
+{
+    var start = Date.parse("Jan 1,2005 00:00");
+    var stop  = Date.parse("Dec 31,2006 00:00");
+
+    var out = document.getElementById("exampl2");
+    var tw2 = new TimeWindow(start, stop);
+
+    var pc1 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    pc1.set_tw(tw2);
+    pc1.resize(800,100);
+
+    var sep = new MonthInterval(MonthInterval.sep); 
+    var monthly = new MonthInterval(); 
+
+    var tue = new DayInterval(DayInterval.tue); 
+    var fullday = new TimeWindow(0*60*60*1000, 24*60*60*1000-1);
+
+    var thirdweek = new TimeWindow(7*2*Interval.daylength, 7*3*Interval.daylength-1);
+    var trdp = new TimePattern(thirdweek,sep);
+
+    var tp1 = new TimePattern(fullday,tue);
+    var tp2 = new OrPattern(tp1,trdp);
+
+    //var tpa = new AndPattern(tp1,noweekend);
+
+    fill(start,stop,pc1,tp2);
+}
+
+function irregular()
+{
+    var start = Date.parse("Jan 1,2007 00:00");
+    var stop  = Date.parse("Jan 1,2008 00:00");
+
+    var out = document.getElementById("irregular");
+    var tw2 = new TimeWindow(start, stop);
+
+    var pc1 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    pc1.set_tw(tw2);
+    pc1.resize(800,100);
+
+    var i = new MonthInterval(); 
+    var tw = new TimeWindow(0,28*24*60*60*1000-1);
+    var tp = new TimePattern(tw,i);
+
+    var valid = tp.valid(start);
+    if (valid) { 
+        start = tp.next_start(start);
+    }
+    end = tp.next_end(start);
+    while (start && end && start < stop) {
+        var app = new Appointment(pc1,0,0,types[0],"id1");
+        tw = new TimeWindow(start,end);
+        app.set_tw(tw);
+        start = tp.next_start(end);
+        if (!start) break;
+        end = tp.next_end(start);
+    }
+}
+
+function birthday()
+{
+    var start = Date.parse("Jan 1,1966 00:00");
+    var stop  = Date.parse("Jan 1,2008 00:00");
+
+    var out = document.getElementById("birthday");
+    var tw2 = new TimeWindow(start, stop);
+
+    var pc1 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    pc1.set_tw(tw2);
+    pc1.resize(800,100);
+
+    var i = new MonthInterval(4); 
+    var tw = new TimeWindow(1*24*60*60*1000,30*24*60*60*1000);
+    var tp = new TimePattern(tw,i);
+
+    var valid = tp.valid(start);
+    if (!valid) { 
+        start = tp.next_start(start);
+    }
+    end = tp.next_end(start);
+    while (start < stop) {
+        var app = new Appointment(pc1,0,0,types[0],"id1");
+        tw = new TimeWindow(start,end);
+        app.set_tw(tw);
+        start = tp.next_start(end);
+        end = tp.next_end(start);
+    }
+}
+
+function main()
+{
+    simple_date();
+    less_simple_date();
+    irregular();
+    birthday();
+    negate();
+    exampl1();
+    exampl2();
+}
+
+</script>
+</head>
+
+<body onload="main()">
+
+<h1>Timepatterns</h1>
+
+Timewindow handling is a frequently recurring issue, so a generic way of handling these would be very usefull. I will try to implement a way of handling timewindows, which i cal timepatterns because of the recurrence that can be handled with it. 
+To be able to keep timewindows simple, but leave the oppurtunity open to make more complex timepatterns, i chose to allow timewindows to be combined.
+
+Since this uses a grouping scheme and the <a href="https://svn.almende.com/cgi-bin/trac.cgi/browser/GAME">GAME</a> model was invented exactly for that, i will try to implement the datastructures using GAME.
+
+<h1>TimeStamp</h1>
+
+A TimeStamp is typically 1 moment in time, and used for start- end endtimes. The unit for a timestamp is something to decide on yet, but it should be an integer value gradually increasing for later moments in time. This of course to make calculations easy and fast. time_t would be workable, but i advice to take 8 bytes for a timestamp not only to avoid 2038 problems, but also to increase the detail to microseconds or even more.
+For now the standard of javascript and java's 'Date' class is used which means :
+
+<ul>
+<li>storage in an 8 byte signed integer (long long)
+<li>precision = milliseconds
+<li>offset is January 1, 1970, 00:00:00 GMT 
+</ul>
+
+With c's time_t this means some extra coding but at least the offset is the same.
+
+<h1>TimeWindow</h1>
+
+A timewindow is a set of two timestamps, start and end, or start and duration. It does not really matter which of the two is chosen since both can be derived from eachother. Internally it is easier to work with start and end, so that's how it is stored. A timewindow is supposed to be 'open', or 'valid' between start and end and 'closed' or 'invalid' outside. That's inclusive so exactly on start and end the window is also valid.
+
+The simplest implementation (javascript):
+<pre>
+function TimeWindow(start,end)
+{
+    this.start=start;
+    this.end=end;
+}
+</pre>
+
+So these are 'simple' timepatterns, with a start and end time :
+
+<pre>
+function simple_date()
+{
+    var start = Date.parse("Feb 5,2007 00:00")/1000;
+    var end   = Date.parse("Feb 6,2007 00:00")/1000;
+    var tw_start = Date.parse("Feb 5,2007 09:00")/1000;
+    var tw_end   = Date.parse("Feb 5,2007 13:30")/1000;
+
+    var out = document.getElementById("simple_date");
+    var tw = new TimeWindow(tw_start, tw_end);
+    var tw2 = new TimeWindow(start, end);
+
+    var pc1 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    pc1.set_tw(tw2);
+    pc1.resize(800,100);
+
+    var app = new Appointment(pc1, 0,0 , types[0], "id1");
+    app.set_tw(tw);
+}
+</pre>
+
+This function draws the plancanvas below.
+The start and end time of PlanCanvas are also a TimeWindow, so you can set that directly with set_tw, but it also works with start and end times in the PlanCanvas constructor or the PlanCanvas.set_world() function.
+<br>
+Appointments also have the set_tw function, as an example i left start and end in both the PlanCanvas and the Appointment constructors 0.
+
+<div id="simple_date"></div>
+
+<h1>recurrence</h1>
+
+One step more complex would be a recurring timewindow, let's say every last quarter of an hour. For that we need a recurrence pattern, or Interval. Interval is implemented as an object with one important member function : next(ts)
+
+function Interval(start,period)
+{
+    this.start=start;
+    this.period=period;
+
+    this.next = function(after)
+    {
+        return Math.floor( ((after-this.start)/this.period) + 1) * this.period + this.start;
+    }
+}
+
+This is the most basic Interval with a start time and a regular interval (period). <br>
+Next should give the first interval AFTER the timestamp, not the same, so you should be able to use the output for the next call.
+This interval is not valid before start so choose it very early if you plan to calculate backwards in time. Our interval would be hourly so :
+
+<pre>
+    var i = new Interval(0,3600000); // milliseconds !
+</pre>
+
+But to get the correct timewindows we need to combine the interval with a timewindow, creating a timepattern.
+
+<pre>
+
+function TimeEvent(ts,state)
+{
+    this.ts=ts;
+    this.st=state;
+}
+
+function TimePattern(tw,ival)
+{
+    this.tw=tw;
+    this.iv=ival;
+
+    this.next_start=function(after)
+    {
+        
+    }
+
+    this.next_end=function(after)
+    {
+        
+    }
+
+    this.next=function(after)
+    {
+        var s = this.next_start(after);
+        var e = this.next_end(after);
+
+        if ( s < e ) 
+            return new TimeEvent(s,0);
+        else
+            return new TimeEvent(e,1);
+    }
+}
+</pre>
+
+As before next_** should give new timestamps after the given one so they keep advancing. This time however it matters if a timestamp is a start or end of a timeindow. The combined timewindow is caculated as offset from the intervals, if you have start or end exceeding the interval, the result will not be what you want.
+
+So the last quarter example would be: 
+
+<pre>
+function less_simple_date()
+{
+    var start = Date.parse("Feb 5,2007 00:00")/1000;
+    var end   = Date.parse("Feb 6,2007 00:00")/1000;
+    var tw_start = Date.parse("Feb 5,2007 09:00")/1000;
+    var tw_end   = Date.parse("Feb 5,2007 13:30")/1000;
+
+    var out = document.getElementById("less_simple_date");
+    var tw = new TimeWindow(tw_start, tw_end);
+    var tw2 = new TimeWindow(start, end);
+
+    var pc1 = new PlanCanvas(out,0,0,cl_b,ignore,types);
+    pc1.set_tw(tw2);
+    pc1.resize(800,100);
+
+    var i = new Interval(0,60*60); // milliseconds !
+    var tw = new TimeWindow(45*60,60*60);
+    var tp = new TimePattern(tw,i);
+
+    var start = Date.parse("Feb 5,2007 00:00")/1000;
+    var stop   = Date.parse("Feb 6,2007 00:00")/1000;
+
+    var valid = tp.valid(start);
+    if (!valid) { 
+        start = tp.next_start(start);
+    }
+    end = tp.next_end(start);
+    while (start < stop) {
+        var app = new Appointment(pc1, 0,0 , types[0], "id1");
+        tw = new TimeWindow(start,end);
+        app.set_tw(tw);
+        start = tp.next_start(end);
+        end = tp.next_end(start);
+    }
+}
+</pre>
+
+<div id="less_simple_date"></div>
+</body>
+
+Any regular interval can be made by instantiating an Interval object with the ciorrect start and interval parameters, but you are entirely responsible for ensuring your timewindows do not exceed the interval space!
+
+<h1>calculated intervals</h1>
+
+So much for a regular pattern. It is of course also possible to implement irregular Intervals like months/years. But since those are frequently used Intervals they have been implemented already :
+
+<pre>
+var yi = new YearInterval();
+var mi = new MonthInterval(3); // march
+</pre>
+
+Below are drawn the first 28 days of each month in 2007, code:
+<pre>
+...
+    var i = new MonthInterval(); 
+    var tw = new TimeWindow(0,28*24*60*60*1000);
+    var tp = new TimePattern(tw,i);
+...
+</pre>
+
+<div id="irregular"></div>
+
+Or all april's since 1966 (april 21 is too small to show up)  ;)
+
+<pre>
+...
+    var i = new MonthInterval(4); 
+    var tw = new TimeWindow(1*24*60*60*1000,30*24*60*60*1000);
+    var tp = new TimePattern(tw,i);
+...
+</pre>
+
+<div id="birthday"></div>
+
+<h1>combining timepatterns</h1>
+
+Even more complex timepatterns are mostly just combinations of simple timepatterns, for instance:
+
+<ul>
+<li>every 10th of the month except weekends
+<li>the third tuesday in september.
+<li>all workhours in common for ask-usa and ask-nl
+<li>who was born in the year of the fire horse (chinese calendar)
+</ul>
+
+The most usable combination method here are union and intersection, also negation might be handy. 
+To handle the examples above :
+
+<ul>
+<li>every 10th of the month except weekends
+</ul>
+
+Create a simple timepattern made of MonthInterval and the 10th day timewindow, then a second one starting at a very early monday-friday and make it repeat every 7 days (if you are realy anal you make a weekend pattern and negate that).  The union of those implements the pattern you want. 
+
+To do that hierarchicaly, i added the three operations above in new classes with the same interface as TimePattern: NotPattern(a), AndPattern(a,b) and OrPattern(a,b). More classes could be added if needed, just implement all methods next_start, next_end, prev_start, prev_end and valid.
+
+The NotPattern class for instance is rather simple :
+
+<pre>
+function NotPattern(a)
+{
+    this.a=a;
+
+    this.next_start=function(after) {   return this.a.next_end(after); }
+    this.next_end=function(after) {   return this.a.next_start(after); }
+    this.prev_start=function(before) { return this.a.prev_end(before); }
+    this.prev_end=function(before) { return this.a.prev_start(before); }
+    this.valid=function(at) { return ! this.a.valid(at); }
+}
+</pre>
+<br>
+A negated dump of the 28 days a month example above :
+
+<div id="negate"></div>
+
+The only line of code changed being :
+
+<pre>
+    ...
+    var tp = new NotPattern(new TimePattern(tw,i));
+    ...
+</pre>
+
+The other Combinatory classes are similar, here are some of the examples above:
+
+<ul>
+<li>every 10th of the month except weekends
+</ul>
+
+This is done (in this case a little bit extra elaborate) with:
+<pre>
+...
+    var monthly = new MonthInterval(); 
+    var tenth = new TimeWindow(9*24*60*60*1000, 10*24*60*60*1000-1);
+    var weekend = new TimeWindow(2*24*60*60*1000, 4*24*60*60*1000-1);
+    var weekly = new Interval(0*24*60*60*1000, 7*24*60*60*1000);
+
+    var tp_tenth = new TimePattern(tenth,monthly);
+    var tp_weekend = new TimePattern(weekend,weekly);
+
+    var tp_noweekend = new NotPattern(tp_weekend);
+    var tp_result = new AndPattern(tp_tenth,tp_noweekend);
+...
+</pre>
+
+Visualized below are from top to bottom :
+
+<ol>
+<li>every tenth day of the month in 2007
+<li>every weekend in 2007
+<li>the inverse of every weekend in 2007, thus the weekdays in 2007
+<li>the intersection between the weekdays and 10th, giving every 10th of the month except if it is in a weekend.
+</ol>
+
+<div id="exampl1"></div>
+
+<ul>
+<li>the third tuesday in september.
+</ul>
+
+Let's say for this year only.
+
+<pre>
+</pre>
+
+<div id="exampl2"></div>
+
+</body>
+
+</html>

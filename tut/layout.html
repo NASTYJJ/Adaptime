@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN"
+"http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<link rel="stylesheet" type="text/css" href="../../style.css" id="feyenoord_ss"/>
+<head>
+
+<!--
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="0">
+<meta http-equiv="cache-control" content="no-store, no-cache, must-revalidate">
+-->
+
+<script language="javascript" src="../Global.js"></script>
+<script language="javascript" src="../Sha1.js"></script>
+<script language="javascript" src="../Coord.js"></script>
+<script language="javascript" src="../Resize.js"></script>
+<script language="javascript" src="../lib/Misc.js"></script>
+<script language="javascript" src="../TimePattern.js"></script>
+<script language="javascript" src="../Browser.js"></script>
+<script language="javascript" src="../DragDrop.js"></script>
+<script language="javascript" src="../Oo.js"></script>
+<script language="javascript" src="../lib/Da.js"></script>
+<script language="javascript" src="../Ui.js"></script>
+<script language="javascript" src="../Dom.js"></script>
+<script language="javascript" src="../Debug.js"></script>
+<script language="javascript" src="../Popup.js"></script>
+<script language="javascript" src="../lib/Json.js"></script>
+<script language="javascript" src="../Tabs.js"></script>
+<script language="javascript" src="../lib/Ajax.js"></script>
+<script language="javascript" src="../Color.js"></script>
+<script language="javascript" src="../Scale.js"></script>
+<script language="javascript" src="../Event.js"></script>
+<script language="javascript" src="../Jiskefet.js"></script>
+<script language="javascript" src="../Appointment.js"></script>
+<script language="javascript" src="../PlanCanvas.js"></script>
+<script language="javascript" src="../db/Db.js"></script>
+<script language="javascript">
+
+var ddc = new DragDropContext();
+
+function ignore(e)
+{
+    // just completely ignore events
+}
+
+function main()
+{
+	var d=document.getElementById("s1");
+    var cl = new CanvasLayout(30*60000,null);
+
+    var t1 = new AppType(1,"doing nothing","orange","apptype_0",1.0,true);
+    var types = [ t1 ];
+
+    start = 0;
+    end = start + 24*60*60000;
+	d.style.background="grey";
+	d.style.width="800px";
+	d.style.height="100px";
+    var pc = new PlanCanvas(d,start,end,cl,ignore,types,ddc,0);
+}
+
+</script>
+</head>
+<body onload="main()">
+
+<div id="s1"></div>
+
+The grey rectangle is one PlanCanvas. It shows 24 hours of any day. The standard timeformatting function that displays times in the Appointment works with microseconds, so that's what i used for the start and endtime (and the snap value). 
+Try creating appointments with the right mouse button. also move them around you may notice that overlapping is forbidden by default. 
+<br>
+The basic movements are creation, resizing and movement. 
+
+Code :
+
+<pre>
+// reusable variables
+var ddc = new DragDropContext();
+
+function ignore(e)
+{
+    // just completely ignore events
+}
+
+function main()
+{
+	var d=document.getElementById("s1");
+    var cl = new CanvasLayout(30*60000,null);
+
+    var t1 = new AppType(1,"doing nothing","orange","apptype_0",1.0,true);
+    var types = [ t1 ];
+
+    start = 0;
+    end = start + 24*60*60000;
+    d.style.background="grey";
+    d.style.width="800px";
+    d.style.height="100px";
+    var pc = new PlanCanvas(d,start,end,cl,ignore,types,ddc,0);
+}
+</pre>
+
+<div id="s1"></div>
+
+</html>

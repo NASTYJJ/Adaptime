@@ -1,0 +1,211 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../style/default/style.css" id="feyenoord_ss"/>
+
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script language="javascript">
+
+// reusable variables
+var ddc = new DragDropContext();
+
+var id_counter=0;
+
+function handler(event)
+{
+    var from = event.from;
+    var to   = event.to;
+
+    var pc = from.dragzone;
+    var p2 = to.dropzone;
+    var app  = event.draggable;
+
+	// an example of total refusal of movement :
+    if (p2.id == "uneditable") return false;
+
+    // of course you can skip these checks if you realy
+    // know which types you use 
+    if (pc.type != "PlanCanvas") {
+        alert("i cannot drag from : " + pc.type);
+        return false;
+    }
+    if (p2.type != "PlanCanvas") {
+        alert("i cannot drop on  : " + p2.type);
+        return false;
+    }
+    if (app.type != "Appointment") {
+        alert("i cannot drag  : " + app);
+        return false;
+    }
+
+    var msg ="";
+    outdiv = pc.outdiv;
+    switch (event.type) {
+        case event_insert:
+            app.id = id_counter++;
+            msg += "insert:";
+            msg += app.id;
+        break;
+        case event_resize:
+            msg += "resize:";
+            msg += app.id;
+        break;
+        case event_move:
+            msg += "move:";
+            msg += app.id;
+        break;
+        case event_delete:
+            msg += "delete:";
+            msg += app.id;
+        break;
+        default:
+            alert ("you did something WEIRD!");
+        break;
+    }
+    if (from.tw) {
+        msg += " from " + pc.id + "[";
+        msg += from.tw.start + "][";
+        msg += from.tw.end + "]";
+    }
+    if (to.tw) {
+        msg += " to " + p2.id + "[";
+        msg += to.tw.start + "][";
+        msg += to.tw.end + "]";
+    }
+    outdiv.innerHTML=msg;
+
+    return true;
+}
+
+function main()
+{
+	var d=document.getElementById("s1");
+	var outdiv=document.getElementById("s2");
+    var cl_b = new CanvasLayout(1800,"brownstyle");
+    var cl_g = new CanvasLayout(60,"greenstyle");
+    
+    var t1 = new AppType(-1,"doing nothing","#777777");
+    var t2 = new AppType(-1,"being free","green");
+    var t3 = new AppType(-1,"kinda busy","red");
+    
+    var types = [ t1, t2, t3 ];
+
+    start = last_midnight();
+    end = next_midnight();
+    var pc1 = new PlanCanvas(d,start,end,cl_b,handler,types,ddc);
+    var pc2 = new PlanCanvas(d,start,end,cl_g,handler,types,ddc);
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+
+	pc1.outdiv=outdiv;
+	pc1.id="brown plancanvas";
+	pc2.outdiv=outdiv;
+	pc2.id="green plancanvas";
+	pc1.set_legend(l);
+	pc2.set_legend(l);
+}
+</script>
+</head>
+<body onload="main()">
+
+<div id="s1"></div>
+<div id="s2" style="background: red"></div>
+
+The code :
+
+<pre>
+var id_counter=0;
+
+function handler(event)
+{
+    var from = event.from;
+    var to   = event.to;
+
+    var pc = from.dragzone;
+    var p2 = to.dropzone;
+    var app  = event.draggable;
+
+	// an example of total refusal of movement :
+    if (p2.id == "uneditable") return false;
+
+    // of course you can skip these checks if you realy
+    // know which types you use 
+    if (pc.type != "PlanCanvas") {
+        alert("i cannot drag from : " + pc.type);
+        return false;
+    }
+    if (p2.type != "PlanCanvas") {
+        alert("i cannot drop on  : " + p2.type);
+        return false;
+    }
+    if (app.type != "Appointment") {
+        alert("i cannot drag  : " + app);
+        return false;
+    }
+
+    var msg ="";
+    outdiv = pc.outdiv;
+    switch (event.type) {
+        case event_insert:
+            app.id = id_counter++;
+            msg += "insert:";
+            msg += app.id;
+        break;
+        case event_resize:
+            msg += "resize:";
+            msg += app.id;
+        break;
+        case event_move:
+            msg += "move:";
+            msg += app.id;
+        break;
+        case event_delete:
+            msg += "delete:";
+            msg += app.id;
+        break;
+        default:
+            alert ("you did something WEIRD!");
+        break;
+    }
+    if (from.tw) {
+        msg += " from " + pc.id + "[";
+        msg += from.tw.start + "][";
+        msg += from.tw.end + "]";
+    }
+    if (to.tw) {
+        msg += " to " + p2.id + "[";
+        msg += to.tw.start + "][";
+        msg += to.tw.end + "]";
+    }
+    //outdiv.innerHTML=msg;
+
+    return true;
+}
+
+function main()
+{
+	var d=document.getElementById("s1");
+	var outdiv=document.getElementById("s2");
+    var cl_b = new CanvasLayout(1800,"brownstyle");
+    var cl_g = new CanvasLayout(60,"greenstyle");
+    
+    var t1 = new AppType(-1,"doing nothing","#777777");
+    var t2 = new AppType(-1,"being free","green");
+    var t3 = new AppType(-1,"kinda busy","red");
+    
+    var types = [ t1, t2, t3 ];
+
+    start = last_midnight();
+    end = next_midnight();
+    var pc1 = new PlanCanvas(d,start,end,cl_b,handler,types,ddc);
+    var pc2 = new PlanCanvas(d,start,end,cl_g,handler,types,ddc);
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+
+	pc1.outdiv=outdiv;
+	pc1.id="brown plancanvas";
+	pc2.outdiv=outdiv;
+	pc2.id="green plancanvas";
+	pc1.set_legend(l);
+	pc2.set_legend(l);
+}
+</pre>
+
+</html>

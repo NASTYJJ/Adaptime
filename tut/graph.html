@@ -1,0 +1,67 @@
+<html>
+  <head>
+<!--[if IE]><script type="text/javascript" src="../excanvas.js"></script><![endif]-->
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="../Feyenoord.js"></script>
+	<script type="text/javascript" src="../Graph.js"></script>
+    <script type="text/javascript">
+      
+      google.load('visualization', '1', {'packages':['piechart']});
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+      
+		function generate_data(nodes,segments)
+		{
+			var nds= Array();
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Source Node');
+			data.addColumn('string', 'Target Node');
+			data.addColumn('number', 'Line Width');
+			data.addColumn('number', 'Line Length');
+	
+			for (var s=0; s< segments; s++) {
+				var l = Math.floor(Math.random() * nodes);
+				var r = Math.floor(Math.random() * nodes);
+				var len = 100; // Math.floor(Math.random() * 380);
+				var wid = Math.floor(Math.random() * 6);
+				data.addRow(['Node' + l, 'Node' + r, len,1]);
+			}
+	
+			return data;
+
+		}
+      // Callback that creates and populates a data table, 
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+      // Create our data table.
+
+		var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Source Node');
+			data.addColumn('string', 'Target Node');
+			data.addColumn('number', 'Line Width');
+			data.addColumn('number', 'Line Length');
+			data.addRows([
+			['Node1', 'Node2', 80, 11],
+			['Node1', 'Node3', 80, 8],
+			['Node1', 'Node4', 80, 3],
+			['Node2', 'Node4', 80, 5]
+		]);
+
+		data = generate_data(100,100);
+
+        var graph = new GraphCanvas(document.getElementById('chart_div'));
+		graph.setCenter("Node1");
+        graph.draw(data); 
+	}
+
+    </script>
+  </head>
+
+  <body>
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div" style="background: #ffffff; left:100px; top: 20px; width:850px; height: 400px;"></div>
+  </body>
+</html>

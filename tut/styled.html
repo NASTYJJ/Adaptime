@@ -1,0 +1,90 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../style/default/style.css" id="feyenoord_ss"/>
+
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script language="javascript">
+
+// reusable variables
+var ddc = new DragDropContext();
+
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+function main()
+{
+	var d=document.getElementById("s1");
+    var cl_b = new CanvasLayout(3600000,"brownstyle");
+    var cl_g = new CanvasLayout(60000,"greenstyle");
+    
+    var dbgtest = document.getElementById("debug");
+
+    if (dbgtest) {
+        global.debug = new Debug(dbgtest);
+    }
+
+    var t1 = new AppType(-1,"doing nothing","#117788", null, 1.0,true);
+    var types = [ t1 ];
+
+    start = last_midnight();
+    end = start + 24 * 3600000;
+	d.style.width="800px";
+	d.style.height="400px";
+    var pc1 = new PlanCanvas(d,start,end,cl_b,ignore,types,null);
+	pc1.resize(800,200);
+    var pc2 = new PlanCanvas(d,start,end,cl_g,ignore,types,null);
+	pc2.xywh(0,0,800,200);
+}
+
+</script>
+</head>
+<body onload="main()">
+<table>
+<tr>
+<td>
+<div id="s1"></div>
+</td>
+<tr>
+<td>
+
+Note that you can drag appointments between the two plancanvasses, and that the green plancanvas has a smaller 'snap' than the brown one.
+If you drop appointments outside the canvasses, nothing happens since you have to assign a dom element (possibly the document.body) as a 'garbage' element.
+<br>
+The code:
+<pre>
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+function main()
+{
+	var d=document.getElementById("s1");
+    var cl_b = new CanvasLayout(3600000,"brownstyle");
+    var cl_g = new CanvasLayout(60000,"greenstyle");
+    
+    var dbgtest = document.getElementById("debug");
+
+    if (dbgtest) {
+        global.debug = new Debug(dbgtest);
+    }
+
+    var t1 = new AppType(-1,"doing nothing","#117788", null, 1.0,true);
+    var types = [ t1 ];
+
+    start = last_midnight();
+    end = start + 24 * 3600000;
+	d.style.width="800px";
+	d.style.height="400px";
+    var pc1 = new PlanCanvas(d,start,end,cl_b,ignore,types,null);
+	pc1.resize(800,200);
+    var pc2 = new PlanCanvas(d,start,end,cl_g,ignore,types,null);
+	pc2.xywh(0,0,800,200);
+}
+</pre>
+
+</table>
+
+</html>

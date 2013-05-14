@@ -1,0 +1,267 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="Tabs.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>Tabs.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		No overview generated for 'Tabs.js'<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="Tab.html">Tab</a></b></td>
+    <td>&nbsp;</td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="Tabs.html">Tabs</a></b></td>
+    <td>&nbsp;</td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="reserved">function</span> Tab(l,c,d)
+{
+	<span class="reserved">this</span>.label=l;
+	<span class="reserved">this</span>.content=c;
+	<span class="reserved">this</span>.udata=d;
+}
+
+<span class="comment">/** <span class="attrib">@constructor</span> 
+  * simple tabulator class
+  */</span>
+<span class="reserved">function</span> Tabs(p,hlcolor)
+{
+	var thisobj=<span class="reserved">this</span>;
+	thisobj.tabs= Array();
+
+	<span class="reserved">this</span>.hlcolor=<span class="literal">"#ffffff"</span>;
+	<span class="reserved">if</span> (hlcolor)
+		<span class="reserved">this</span>.hlcolor=hlcolor;
+
+	<span class="reserved">this</span>.init=<span class="reserved">function</span>(p) 
+	{
+    	thisobj.topelm = document.createElement(<span class="literal">"div"</span>);
+		dom_xywh(thisobj.topelm,<span class="literal">'0px'</span>,<span class="literal">'0px'</span>,<span class="literal">'100%'</span>,<span class="literal">'100%'</span>);
+    	thisobj.topelm.style.position=<span class="literal">"absolute"</span>;
+    	thisobj.topelm.style.display=<span class="literal">"inline"</span>;
+    	thisobj.tabulator = document.createElement(<span class="literal">"div"</span>);
+    	thisobj.tabulator.style.position=<span class="literal">"absolute"</span>;
+    	thisobj.tabulator.style.display=<span class="literal">"inline"</span>;
+		thisobj.topelm.appendChild(thisobj.tabulator);
+		dom_xywh(thisobj.topelm,<span class="literal">'0px'</span>,<span class="literal">'10px'</span>,<span class="literal">'100%'</span>,<span class="literal">'15px'</span>);
+		dom_xywh(thisobj.tabulator,<span class="literal">'0px'</span>,<span class="literal">'0px'</span>,<span class="literal">'100%'</span>,<span class="literal">'15px'</span>);
+
+    	thisobj.dataarea = document.createElement(<span class="literal">"div"</span>);
+    	thisobj.dataarea.style.position=<span class="literal">"absolute"</span>;
+		thisobj.topelm.appendChild(thisobj.dataarea);
+		dom_xywh(thisobj.dataarea,<span class="literal">'0px'</span>,<span class="literal">'25px'</span>,<span class="literal">'100%'</span>,<span class="literal">'150px'</span>);
+
+		<span class="comment">// create tabs if already added (init called afterwards)</span>
+		<span class="reserved">for</span> (var t=0;t&lt;thisobj.tabs.length; t++) {
+			var tab= thisobj.tabs[t];
+			thisobj.draw_label(tab);
+		}
+		p.appendChild(thisobj.topelm);
+	}
+
+	<span class="reserved">this</span>.xy=<span class="reserved">function</span>(x,y) {
+		dom_xywh(thisobj.topelm,x+<span class="literal">'px'</span>,y+<span class="literal">'px'</span>);
+	}
+
+	<span class="reserved">function</span> refill(e)
+	{
+		var tab=<span class="reserved">this</span>.tab;
+		remove_children(thisobj.dataarea);
+
+		var domtree=tab.content(thisobj.dataarea, tab.udata);
+		<span class="reserved">if</span> (!domtree) <span class="reserved">return</span>;
+		thisobj.dataarea.appendChild(domtree);
+	}
+
+	<span class="reserved">function</span> hl(){
+		<span class="reserved">this</span>.className=<span class="literal">"UiTabHighlighted"</span>;
+	}
+
+	<span class="reserved">function</span> ll(){
+		<span class="reserved">this</span>.className=<span class="literal">"UiTab"</span>;
+	}
+
+	<span class="reserved">this</span>.draw_label=<span class="reserved">function</span>(tab) {
+		var l = document.createElement(<span class="literal">"span"</span>);
+		l.className=<span class="literal">"UiTab"</span>;
+		l.innerHTML=tab.label;
+		l.onclick=refill;
+		l.onmouseover=hl;
+		l.onmouseout=ll;
+    	l.style.cursor= global.browser.icon_name(<span class="literal">"hand"</span>);
+		l.tab=tab;
+		dom_xywh(l,0,0,null,<span class="literal">'15px'</span>);
+		thisobj.tabulator.appendChild(l);
+	}
+
+	<span class="comment">// justy add them in order please </span>
+	<span class="reserved">this</span>.add=<span class="reserved">function</span>(label,content,data) 
+	{
+		var t = thisobj.tabs.length;
+		thisobj.tabs[t]=new Tab(label,content,data);
+		<span class="reserved">if</span> (thisobj.tabulator)
+			thisobj.draw_label(thisobj.tabs[t]);
+	}
+
+	<span class="reserved">if</span> (p) <span class="reserved">this</span>.init(p);
+}
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Feb 19 19:00:18 2010</div>
+</body>
+</html>

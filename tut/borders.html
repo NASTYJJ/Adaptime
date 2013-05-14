@@ -1,0 +1,157 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../style/default/style.css" id="feyenoord_ss"/>
+
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script language="javascript">
+
+// reusable variables
+var ddc = new DragDropContext();
+
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+function main()
+{
+	var d3=document.getElementById("d3");
+	var d4=document.getElementById("d4");
+	var d5=document.getElementById("d5");
+	var d6=document.getElementById("d6");
+	var d7=document.getElementById("d7");
+
+    var cl_g = new CanvasLayout(1800,"greenstyle");
+    var cl_b = new CanvasLayout(1800,"marginsample");
+    var cl_r = new CanvasLayout(1800,"redstyle");
+
+    start = last_midnight();
+
+    var t1 = new AppType(-1,"rail borders","red");
+    var t2 = new AppType(-1,"stop borders","blue");
+    var t3 = new AppType(-1,"both","yellow");
+    var t4 = new AppType(-1,"neither", "orange");
+
+	t1.set_rails(6,"black");
+	t2.set_stops(1,"white");
+	t3.set_rails(5,"red");
+	t3.set_stops(5,"blue");
+    
+    var types = [ t1, t2, t3, t4 ];
+
+    end = next_midnight();
+    var pc1 = new PlanCanvas(d3,start,end,cl_b,ignore,types,ddc);
+    var pc2 = new PlanCanvas(d4,start,start+(24*3600),cl_g,ignore,types,ddc);
+    var pc3 = new PlanCanvas(d5,start,end,cl_r,ignore,types,ddc, PlanCanvas.FLAG_VERTICAL);
+	var l = new Legend(d6,types,700,30,20,20) // block pars bw and bh optional
+
+	global.debug = new Debug(d7);
+
+	pc1.set_text("appointment placement through margins");
+	pc2.set_text("full size horizontal");
+	pc3.set_text("full size vertical");
+
+    pc1.resize(600,200);
+    pc2.resize(600,100);
+    pc3.resize(200,350);
+
+	pc1.set_legend(l);
+	pc2.set_legend(l);
+	pc3.set_legend(l);
+
+}
+
+</script>
+</head>
+<body onload="main()">
+
+<table>
+<tr>
+<td id="d3" style="background-image: url(../style/default/rock-blue.jpg)"></td>
+<td id="d5" rowspan=2></td>
+<tr>
+<td id="d4"></td>
+<tr>
+<td id="d6" colspan=3></td>
+<tr>
+<td id="d7" colspan=3>debug</td>
+</table>
+
+Note the different scales between the three, the appointments will resize accordingly if you drag them between the plancanvasses.
+<br>
+If you want appointments not to span the complete plancanvas, implement it with margins. For example the blue one above is implemented as an 'empty' plancanvas, which means  no background color or image, on top of a tabledata element that contains the image. 
+
+<pre>
+...
+&lt;td id="d3" style="background-image: url(style/default/rock-blue.jpg)"&gt;&lt;/td&gt;
+
+...
+    var cl_b = new CanvasLayout(1800,"marginsample");
+    var pc1  = new PlanCanvas(d3,start,end,cl_b,ignore,types,ddc);
+
+    pc1.resize(600,200);
+...
+</pre>
+
+with css snippet (style/default/style.css)
+
+<pre>
+.plancanvas.marginsample {
+    margin-top: 30;
+    margin-bottom: 10;
+}
+</pre>
+
+The javascript code :
+
+<pre>
+function main()
+{
+    var d3=document.getElementById("d3");
+    var d4=document.getElementById("d4");
+    var d5=document.getElementById("d5");
+    var d6=document.getElementById("d6");
+    var d7=document.getElementById("d7");
+
+    var cl_g = new CanvasLayout(1800,"greenstyle");
+    var cl_b = new CanvasLayout(1800,"marginsample");
+    var cl_r = new CanvasLayout(1800,"redstyle");
+
+    start = last_midnight();
+
+    var t1 = new AppType(-1,"rail borders","red");
+    var t2 = new AppType(-1,"stop borders","blue");
+    var t3 = new AppType(-1,"both","yellow");
+    var t4 = new AppType(-1,"neither", "orange");
+
+    t1.set_rails(6,"black");
+    t2.set_stops(1,"white");
+    t3.set_rails(5,"red");
+    t3.set_stops(5,"blue");
+    
+    var types = [ t1, t2, t3, t4 ];
+
+    end = next_midnight();
+    var pc1 = new PlanCanvas(d3,start,end,cl_b,ignore,types,ddc);
+    var pc2 = new PlanCanvas(d4,start,start+(24*3600),cl_g,ignore,types,ddc);
+    var pc3 = new PlanCanvas(d5,start,end,cl_r,ignore,types,ddc, PlanCanvas.FLAG_VERTICAL);
+    var l = new Legend(d6,types,700,30,20,20) // block pars bw and bh optional
+
+    global.debug = new Debug(d7);
+
+    pc1.set_text("appointment placement through margins");
+    pc2.set_text("full size horizontal");
+    pc3.set_text("full size vertical");
+
+    pc1.resize(600,200);
+    pc2.resize(600,100);
+    pc3.resize(200,350);
+
+    pc1.set_legend(l);
+    pc2.set_legend(l);
+    pc3.set_legend(l);
+
+}
+</pre>
+
+</html>

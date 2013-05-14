@@ -1,0 +1,71 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../style/default/style.css" id="feyenoord_ss"/>
+
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script language="javascript">
+
+// reusable variables
+var ddc = new DragDropContext();
+
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+function main()
+{
+	var d=document.getElementById("s1");
+	var cl_b = new CanvasLayout(1800000,"flatstyle");
+	var dj = new DomJiskefet(document.body,ddc);
+	
+	var t1 = new AppType(1,"doing nothing",null,"nothing");
+	var t2 = new AppType(2,"being free",null,"free");
+	var t3 = new AppType(3,"kinda busy",null,"busy");
+	
+	var types = [ t1, t2, t3 ];
+	
+	start = last_midnight();
+	end = start + 24 * 3600000;
+	var pc1 = new PlanCanvas(d,start,end,cl_b,ignore,types,ddc);
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+	
+	pc1.set_legend(l);
+}
+
+</script>
+</head>
+
+<body onload="main()">
+
+<div id="s1"></div>
+
+This will give you image'd appointments. The background is made unicolor again for better result. 
+Note that the attempt to put borders on the 'busy' appointments fails because borders are disabled when creating appointments, if you want borders you should use the AppType.set_rails() and AppType.set_stops() functions(see section about <a href="index.html#lay_app">CanvasLayout and Appointments</a>)
+
+    
+The code for the above planboard is :
+
+<pre>
+function show_s3()
+{
+	var d=document.getElementById("s3");
+	var cl_b = new CanvasLayout(1800,"flatstyle");
+	var dj = new DomJiskefet(document.body,ddc);
+	
+	var t1 = new AppType(-1,"doing nothing",null,"nothing");
+	var t2 = new AppType(-1,"being free",null,"free");
+	var t3 = new AppType(-1,"kinda busy",null,"busy");
+	
+	var types = [ t1, t2, t3 ];
+	
+	start = last_midnight();
+	end = next_midnight();
+	var pc1 = new PlanCanvas(d,start,end,cl_b,ignore,types,ddc);
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+	
+	pc1.set_legend(l);
+}
+</pre>
+
+</html>

@@ -1,0 +1,81 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../style/default/style.css" id="feyenoord_ss"/>
+
+<head>
+<script language="javascript" src="../Feyenoord.js"></script>
+<script language="javascript">
+
+// reusable variables
+var ddc = new DragDropContext();
+
+function ignore(event)
+{
+    // just completely ignore events
+}
+
+function main()
+{
+	var d=document.getElementById("popup1");
+	var dbg=document.getElementById("popup2");
+
+	global.debug = new Debug(dbg);
+
+    var cl_b = new CanvasLayout(1800,"brownstyle");
+
+    var t1 = new AppType(-1,"doing nothing","#777777");
+    var t2 = new AppType(-1,"being free","green");
+    var t3 = new AppType(-1,"kinda busy",null, "redstyle");
+    
+    var types = [ t1, t2, t3 ];
+    var start = last_midnight();
+
+    // day
+    var pc1 = new PlanCanvas(d,start,start+ 1*24*3600,cl_b,ignore,types,ddc);
+    // week 
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+
+	pc1.id="brown plancanvas";
+	pc1.set_legend(l);
+
+    function yo(target,data)
+    {
+        alert("triggered own added option on " + data);
+    }
+
+    // appointment menu
+    var appmenu = pc1.set_appointmentmenu();
+    appmenu.add_delete_item("delete app", "bluestyle");
+    appmenu.add_glue_item("glue adjacent apps", "bluestyle");
+    appmenu.add_edittimes("edit times", "bluestyle");
+    appmenu.add_apptype_items();
+    var mi = new MenuItem("own added option", yo, "bluestyle");
+    appmenu.add_menuitem(mi);
+
+    // plancanvas menu
+    var pcmenu = pc1.set_menu(pcmenu);
+    var mi = new MenuItem("own added option", yo, "bluestyle");
+    pcmenu.add_menuitem(mi);
+}
+
+</script>
+</head>
+<body onload="main()">
+
+<div id="popup1"></div>
+<div id="popup2"></div>
+<br><br>
+Note all options added to the menu, besides the appointment types there is 'delete app' which does what it says, and there is 'glue adjecent apps'.
+This last menu itmes tries to make one appointment from the one you clicked on and its surrounding appointments. But it does that only if the types are the same and if the appointment is right besides this one.<br>
+The effect is that the adjacent appointments are deleted and the current one becomes bigger, so the appointment clicked on keeps it current appointment id.
+
+The functions used for this are:
+<pre>
+    // appointment menu
+    var appmenu = pc1.set_appointmentmenu();
+    appmenu.add_delete_item("delete app", "bluestyle");
+    appmenu.add_glue_item("glue adjacent apps", "bluestyle");
+    appmenu.add_apptype_items();
+    var mi = new MenuItem("own added option", yo, "bluestyle");
+    appmenu.add_menuitem(mi);
+</pre>
+</html>

@@ -1,0 +1,272 @@
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+}
+h1{
+	font-size:15px; font-style: italic;
+	text-decoration: underline; 
+}
+h2{
+	font-size:14px; 
+}
+h3{
+	font-size:13px; 
+}
+h4{
+	font-size:12px; 
+}
+h5{
+	font-size:11px; 
+}
+a{
+	color:#990000;
+}
+
+pre{ 
+	font-family: Courier; 
+    background: #bbbbbb;
+}
+
+table{ 
+	font-size:11px
+}
+
+.gainlayout { min-height: 0; } 
+
+.flatstyle {
+	background-color: grey;
+}
+
+.bluestyle {
+    background-image:url("rock-blue.jpg");
+	background-color: brown;
+}
+
+.yellowstyle {
+    background-image:url("rock-yellow.jpg");
+	background-color: brown;
+}
+
+.redstyle {
+    background-image:url("rock-red.jpg");
+	background-color: brown;
+}
+
+.plancanvas.redstyle {
+    background-image:url("rock-red.jpg");
+}
+
+.plancanvas.bluestyle{
+    background-image:url("rock-blue.jpg");
+}
+
+.plancanvas.yellowstyle {
+    background-image:url("rock-yellow.jpg");
+	height: 100%;
+}
+
+.plancanvas.brownstyle {
+    background-image:url("rock-brown.jpg");
+	background-color: brown;
+}
+
+.plancanvas.greenstyle{
+    background-image:url("rock-green.jpg");
+}
+
+.greenstyle{
+    background-image:url("rock-green.jpg");
+}
+
+.plancanvas.marginsample {
+    margin-top: 30;
+    margin-bottom: 10;
+}
+
+.plancanvas {
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	width: 100%;
+	height: 70px;
+}
+
+.vertdaylines {
+    background-image:url("rock-brown.jpg");
+	height: 50px;
+	width: 100%;
+}
+
+.timelines.daylines {
+    background-image:url("rock-brown.jpg");
+    text-align: center;
+	height: 100%;
+    width: 100%;
+}
+
+.timelines.daylines2 {
+    background-image:url("rock-red.jpg");
+    text-align: center;
+	height: 100%;
+    width: 100%;
+}
+
+.timelines.hourlines {
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+    font-size: 10px;
+    text-align: center;
+	background-image: url("rock-brown.jpg");
+    border-left: 2px solid black;
+	height: 20;
+}
+
+.timelines.halfhours {
+	margin-top: 15px;
+	height: 5px;
+    border-left: 1px solid black;
+}
+
+.border_example_dontuse_bytheway{
+	border-top: 4px solid black;
+	border-bottom: 4px solid black;
+    height: 50%;
+}
+
+.appointment{
+    height: 100%;
+    width: 100%;
+	/*filter:alpha(opacity=80); */
+}
+
+.nothing {
+    background-image:url("rock-brown.jpg");
+	/*filter:alpha(opacity=60); */
+	-moz-opacity:.60;
+	opacity:.60;
+}
+
+.appointment.nothing {
+    background-image:url("rock-brown.jpg");
+	/*filter:alpha(opacity=60); */
+	-moz-opacity:.60;
+	opacity:.60;
+}
+
+.appointment.free {
+    background-image:url("rock-green.jpg");
+	/*filter:alpha(opacity=40); */
+	-moz-opacity:.40;
+	opacity:.40;
+}
+
+.appointment.busy {
+	background-color: red;
+	border-left: 4px solid black;
+	border-right: 4px solid black;
+}
+
+.ask_table {
+    border-collapse: collapse;
+    border-width: 0;
+    border: hidden;
+}
+
+.fileinput {
+	background-color:#33BBCC;
+    border-width: 11;
+}
+input {
+    border-width: 1;
+}
+form{
+	display:inline
+}
+.header{
+	padding-left:3px;
+	padding-right:3px;
+}
+.button{
+	border-width:1px;border-style:solid;
+	border-color: #BBBBCC; 
+	cursor: pointer; 
+	line-height: 13px; 
+}
+
+table{
+	border-collapse: separate;
+  	border-spacing: 1px ;
+}
+
+tr {
+}
+
+td {
+}
+
+#sample2 {
+    width: 11;
+    height: 20;
+    background-color: red;
+}
+
+.OuiReachability {
+    width: 111;
+    height: 222;
+    background-color: blue;
+}
+
+
+/*- see menu directory for more meny styles ----*/ 
+
+.tabs {
+  float:left;
+  width:100%;
+  background:#efefef;
+  font-size:93%;
+  line-height:normal;
+      border-bottom:1px solid #666;
+  }
+.tabs ul {
+    margin:0;
+    padding:10px 10px 0 50px;
+    list-style:none;
+  }
+.tabs li {
+  display:inline;
+  margin:0;
+  padding:0;
+  }
+.tabs div {
+  float:left;
+  background:url("feyenoord/images/tableftF.gif") no-repeat left top;
+  margin:0;
+  padding:0 0 0 4px;
+  text-decoration:none;
+  }
+.tabs div span {
+  float:left;
+  display:block;
+  background:url("feyenoord/images/tabrightF.gif") no-repeat right top;
+  padding:5px 15px 4px 6px;
+  color:#666;
+  }
+
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+.tabs div span {float:none;}
+/* End IE5-Mac hack */
+
+.tabs div:hover span {
+  color:#FFF;
+  }
+.tabs div:hover {
+  background-position:0% -42px;
+  }
+.tabs div:hover span {
+  background-position:100% -42px;
+  }
+	
+.tabs div#selected{
+  background-position:0% -42px;
+  }
+.tabs div#selected span {
+  background-position:100% -42px;
+  }
+	
+

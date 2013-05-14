@@ -1,0 +1,1086 @@
+<html>
+<link rel="stylesheet" type="text/css" href="../style.css" id="feyenoord_ss"/>
+
+<head>
+
+<script language="javascript" src="../Feyenoord.js"></script>
+<script language="javascript">
+
+var ddc = new DragDropContext();
+var deb;
+var debugelm;
+var popbase;
+
+function eerste() { alert ("eerste"); }
+function tweede() { alert ("tweede"); }
+function derde() { alert ("derde"); }
+function custom(target,data) { 
+    alert ("custom function data = " + data + " on the " + target.innerHTML + " div "); 
+}
+
+function ajax_async_hndlr(txt,dbg)
+{
+    dbg.append("received " + txt + " from the server<br>");
+    dbg.append("user data was \"" + udata + "\"");
+}
+
+function testobj(num)
+{
+    this.name="test object";
+    this.num=num;
+}
+
+var to = new testobj(10);
+var to2 = new testobj(20);
+
+function json_object()
+{
+	var d = new Debug(document.getElementById("a3"));
+    d.print_attributes(to2);
+}
+
+function json_stringified()
+{
+    var jc = new JsonContext("tut.php");
+    var jm = new JsonMessage("echo",to);
+	var d  = new Debug(document.getElementById("a4"));
+
+    jm.add_object(to2);
+
+    jm2 = jc.get_sync(jm);
+    r   = jm2.get_object(1);
+    if (global.browser.ie_flame("appendChild in other frame")) return;
+    d.print_attributes(r);
+}
+
+function ajax_async()
+{
+    var data="cmd=multiply&fac1=10&fac2=4";
+	var d = new Debug(document.getElementById("a1"));
+    d.print("sending data asynchronous \"" + data + "\" <br>");
+    var ac = new AjaxContext("tut.php");
+    ac.get_async(ajax_async_hndlr,data,d);
+}
+
+function ajax_sync()
+{
+    var data="cmd=multiply&fac1=11&fac2=5";
+	var d = new Debug(document.getElementById("a2"));
+    d.print("sending data synchronous \"" + data + "\" <br>");
+    var ac = new AjaxContext("tut.php");
+    var txt = ac.get_sync(data);
+
+    d.append("received " + txt + " from the server<br>");
+}
+
+function popup_demo()
+{
+	var d=document.getElementById("popup1");
+	var dbg=document.getElementById("popup2");
+
+	global.debug = new Debug(dbg);
+
+    var cl_b = new CanvasLayout(1800,"brownstyle");
+
+    var t1 = new AppType(-1,"doing nothing","#777777");
+    var t2 = new AppType(-1,"being free","green");
+    var t3 = new AppType(-1,"kinda busy","red");
+    
+    var types = [ t1, t2, t3 ];
+    var start = last_midnight();
+
+    // day
+    var pc1 = new PlanCanvas(d,start,start+ 1*24*3600,cl_b,ignore,types,ddc);
+    // week 
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+
+	pc1.id="brown plancanvas";
+	pc1.set_legend(l);
+
+    function yo(target,data)
+    {
+        alert("triggered own added option on " + data);
+    }
+
+    // appointment menu
+    var appmenu = pc1.set_appointmentmenu();
+    appmenu.add_delete_item("verrrrwijder", "bluestyle");
+    appmenu.add_apptype_items();
+    var mi = new MenuItem("own added option", yo, "bluestyle");
+    appmenu.add_menuitem(mi);
+
+    // plancanvas menu
+    var pcmenu = pc1.set_menu(pcmenu);
+    var mi = new MenuItem("own added option", yo, "bluestyle");
+    pcmenu.add_menuitem(mi);
+
+    //pc2.set_cache(24*3600);
+}
+
+function main()
+{
+    popbase= document.getElementById("p1");
+    popbase2= document.getElementById("p2");
+
+    popbase.innerHTML="dark";
+    popbase2.innerHTML="light";
+
+    mi1 = new MenuItem("eerste", eerste, "bluestyle");
+    mi2 = new MenuItem("tweede", tweede, "redstyle");
+    mi3 = new MenuItem("derde", derde, "brownstyle");
+    mi4 = new MenuItem("vierde", custom, "greenstyle");
+
+    mi4.set_data("custom data");
+
+    var mis = new Array( mi1, mi2, mi4);
+    var pop = new PopupMenu(mis);
+
+    popbase.oncontextmenu=pop.trigger_popup;
+    popbase2.oncontextmenu=pop.trigger_popup;
+
+    pop.add_menuitem(mi3);
+}
+
+</script>
+</head>
+<body onload="main()">
+
+<ul>
+<li><a href="#introduction">Introduction</a>
+<ul>
+<li><a href="#oo">Oo</a>
+</ul>
+<li><a href="#classes">Classes</a>
+<ul>
+<li><a href="#dragdrop">DragDropContext</a>
+<li><a href="#layout">CanvasLayout</a>
+<li><a href="#apptype">AppType</a>
+<li><a href="#plancanvas">PlanCanvas</a>
+<li><a href="#appointment">Appointment</a>
+<ul>
+<li><a href="#label">Label</a>
+</ul>
+</ul>
+<li><a href="#debug">Debug</a>
+<li><a href="#options">Options</a>
+<li><a href="#styles">Styles</a>
+<ul>
+<li><a href="#lay_app">CanvasLayout and Appointment</a>
+</ul>
+<li><a href="#comm">Server communication</a>
+<ul>
+<li><a href="#ajax">AjaxContext</a>
+<li><a href="#json">JsonContext</a>
+</ul>
+<li><a href="#decoration">Decoration</a>
+<li><a href="#popup">Popup</a>
+<li><a href="#animation">Animation</a>
+<li><a href="#gwt">Gwt</a>
+<li><a href="#graph">Graph</a>
+</ul>
+
+<a name="introduction"><h1>introduction</h1></a>
+
+This is a tutorial on how to use the PlanCanvas in your webpage. 
+The PlanCanvas is a generic DHTML element for viewing, manipulating and animating intervals like timewindows etc. For now the PlanCanvas is the only class in the feyenoord library which is supposed to be a collection of more interface objects using 'ajax'.
+
+
+<a name="usage"><h2>General Usage</h2></a>
+
+The feyenoord library is built up of several different javascript files which can be included like in the following code :
+
+<pre>
+&lt;html&gt;
+&lt;head&gt;
+
+&lt;script language="javascript" src="Global.js"&gt;&lt;/script&gt;
+&lt;script language="javascript" src="Coord.js"&gt;&lt;/script&gt;
+&lt;script language="javascript" src="Resize.js"&gt;&lt;/script&gt;
+.. (lot's more)
+&lt;script language="javascript"&gt;
+..  (your code)
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+.. (you html)
+</pre>
+
+But this is mainly if you only use part of the modules, or want to disable default options. <br>
+If not a more convenient way is presented by 'obfuscating and crunching' the code into one javascript file called Feyenoord.js. Developers have to run 'make' in the feyenoord directory to create it every time they change code.
+This is by far preferred because all source files are there and in the correct order, plus all comments are removed making it load quicker.
+
+Instead of all source files you now just include one :
+
+<pre>
+&lt;script language="javascript" src="Feyenoord.js"&gt;&lt;/script&gt;
+</pre>
+
+<a name="oo"><h2>Oo</h2></a>
+
+Oh-oh, since this was my first real javascript project, i experimented somewhat with multiple inheritence in Oo.js. I would not do that again a second time, but still it is used for some functionality which i am not going to reimplement.
+In short the function <b>inheritz(class)</b> uses reflection to copy every function (but also all members) to the subclass which makes multiple inheritence possible. <br>The 'z' is not because im illiterate, some browsers have made inherits a reserved word.
+ <br>
+I will discuss all Class objects in order of creation
+
+<a name="classes"><h1>Classes</h1></a>
+
+The main class used is the <b>PlanCanvas</b>, which is basically a html-div element on which you can place and move <b>Appointment</b>s. An appointment is one time interval that is placed on the PlanCanvas div. Every movement or resizing action fires a handler function that can be provided by the webpage creator.
+To have control over the appearance of the plancanvas a class <b>CanvasLayout</b> is used to set the decoration style and snap-intervals. CanvasLayout's can be shared between different PlanCanvases.
+More plancanvases can be placed together to form more complex planboards with for instance different days or templates etc. <br> It is strongly advised not to use borders on the styles representing the PlanCanvas, because of layout differences between browsers. If you want a border, place the canvas(ses) in a table an give the table the border you want!!
+<br>
+To be able to drag appointments between different PlanCanvas's you can use a common <b>DragDropContext</b>. Within the same DragDropContext events like moving between canvas's but also reverting a movement if illegal are handled automatically. You cannot drag appointments between different DragDropContexts. 
+<br>
+
+<a name="dragdrop"><h2>DragDropContexts</h2></a>
+
+If you don't create a DragDropContext (ddc) yourself. the global one is used. So every PlanCanvas created with null as ddc parameter uses the global one.
+The DragDropContext was created with more than only the PlanCanvas in mind, it should be able to handle drags/drops between any interface object in feyenoord(but there is only on right now).
+
+Objects used with a ddc are either classes that can be dragged themselves : <b>Draggable</b>s or that can be dragged from :<b>DragZone</b>s or dropped on : <b>DropZone</b>s. 
+These classes are 'implemented' as interfaces in the file DragDrop.js and you can make a class inherit a set of methods needed for the interface by using :
+
+<pre>
+function myclass()
+{
+	..
+    this.inheritz(new Draggable("myclass"));
+	..
+}
+</pre>
+
+<a name="layout"><h2>CanvasLayout</h2></a>
+
+You need to define the layout of a plancanvas first before creating one. The only mandatory parameter is snap value. Snap is the amount of time to which appointments 'snap' when moving and resizing. For instance a snap of 30*60 (seconds) only allows moves and resizes to half-hours: 12:35 becomes 12:30 or 12:40 etc.
+So this <a href="layout.html">example</a> would make a layout with a half-hour snap.
+
+<b>Please note that you have to choose a snap value that matches the scale of the PlanCanvas.</b> You cannot expect to use a plancanvas stretching a whole year to have 'minute-precision'. You just don't have enough pixels. So for a year set the snap to days or weeks not minutes or hours.
+
+First lets look at how the plancanvas is built up.<br>
+The plancanvas is built from a number of 'div' elements, each having their own function. Some ascii art :
+
+<pre>
+<font face="monospace">
+      
+       +-----------------------------------------------------+
+      /                                                     /
+     /                   glassdiv                          /
+    +-----------------------------------------------------+ +
+       +--/------------------------/       /-----/         /-+ 
+      /  / timeline               /  app  /     /  app    / /
+     /  +               backdiv  +-------+     +---------+ /
+    +-----------------------------------------------------+
+</font>
+</pre>
+
+The total timeline is built upon (backdiv), with a number of appointments in the middle and a transparent 'div' (glassdiv) at the front. Also the timelines or decorations are put on the backdiv. <br>
+The front div is needed because when moving appointments you don't get the mouseover and mouseout events on the backdiv only on the div's that make up the appointments.<br>
+This has the nasty effect that you cannot determine when you leave the planboard with the appointment that you are moving.
+So putting a glassplate in front of it solves a lot of event problems.
+<br>
+
+You can use css to style the appearence of a plancanvas like this:
+
+<pre>
+.plancanvas.brownstyle {
+    background-image:url("rock-brown.jpg");
+	background-color: brown;
+}
+
+.plancanvas.greenstyle{
+    background-image:url("rock-green.jpg");
+	background-color: green;
+}
+</pre>
+
+The corresponding constructors for the layouts and plancanvasses :
+
+<pre>
+function show_s2()
+{
+	var d=document.getElementById("s2");
+    var cl_b = new CanvasLayout(1800,"brownstyle");
+    var cl_g = new CanvasLayout(60,"greenstyle");
+    
+    var t1 = new AppType(-1,"doing nothing","#117788");
+    
+    var types = [ t1 ];
+
+    start = last_midnight();
+    end = next_midnight();
+    var pc1 = new PlanCanvas(d,start,end,cl_b,ignore,types,ddc);
+    var pc2 = new PlanCanvas(d,start,end,cl_g,ignore,types,ddc);
+}
+</pre>
+
+As you see the (optional) second parameter of the CanvasLayout constructor is used to add a className to each plancanvas created with that layout. So every plancanvas created like cl_b will get its style information from the ".plancanvas.brownstyle" section in your style sheet. read the section about <a href="#styles">styles</a> on how cascading style sheets are used in Feyenoord.
+
+<a href="styled.html">styled canvas example</a>
+
+<a name="apptype"><h2>AppType</h2></a>
+
+Appointment types are needed to distinguish between different activities like 'free', 'busy' etc. At least one is needed to draw anything at all. Apptypes are created and put into an array and then passed to a plancanvas. You can reuse that array for each PlanCanvas. In this code snippet see how.
+
+<pre>
+    var t1 = new AppType(-1,"doing nothing",null,"nothing");
+    var t2 = new AppType(-1,"being free",null,"free");
+    var t3 = new AppType(-1,"kinda busy",null,"busy");
+    
+    var types = [ t1, t2, t3 ];
+
+    start = last_midnight();
+    end = start + 24 * 3600;
+    var pc1 = new PlanCanvas(d,start,end,cl_b,ignore,types,ddc);
+	var l = new Legend(d,types,700,30,20,20) // block pars bw and bh optional
+</pre>
+
+The AppType constructor has 4 parameters :
+<pre>
+    function AppType(id,name,color,cname)
+</pre>
+
+Id is a unique id you can use inside your handler function, plancanvas itself does not care about this id, it is there for use in the handler function (later).
+So it is also the user that is responsible for keeping these id's unique.
+Personally i mostly implement it by increasing a counter within the handler function (see id_counter).
+Name is what is used for this appointment type in labels etc. Color can be used if you want to set a color from javascript instead of CSS, like in ask where you get the color from a database field.
+The cname parameter can be used to style the appointment. Note that the color parameter taks precedence, so make it null if you use style sheets!! Technically the cname is just assigned to the className member of the div element created for the so a style sheet like this :
+
+<pre>
+.appointment.nothing {
+    background-image:url("rock-brown.jpg");
+	filter:alpha(opacity=60);
+	-moz-opacity:.60;
+	opacity:.60;
+}
+
+.appointment.free {
+    background-image:url("rock-green.jpg");
+	filter:alpha(opacity=40);
+	-moz-opacity:.40;
+	opacity:.40;
+}
+
+.appointment.busy {
+	background-color: red;
+	border-left: 4px solid black;
+	border-right: 4px solid black;
+}
+</pre>
+
+<hr color="green"><!-- limits the checked portion-->
+And creating the Apptypes like this :
+
+<pre>
+    var t1 = new AppType(-1,"doing nothing",null,"nothing");
+    var t2 = new AppType(-1,"being free",null,"free");
+    var t3 = new AppType(-1,"kinda busy",null,"busy");
+
+</pre>
+
+<a href="apptype.html">Apptype example</a>
+
+Will give you image'd appointments. The background is made unicolor again for better result. Since itis used in the example, this is a good moment to introduce the Legend as well. 
+    
+<pre>
+function Legend(p,types,w,h,bw,bh) // block pars bw and bh optional
+PlanCanvas.set_legend(Legend);
+</pre>
+
+This will make a Legend in 'parent' p based on the types array, w wide/ h high and optional bw and bh specify the size of the selection blocks.
+There is no way in hell i can make the Legend generic enough for everyone so regard it as an example. And steal the code from PlanCanvas.js and alter it to make your custom legend anytime. 
+
+<b>note the set_legend() function to attach the legend to any number of plancanvas's</b><br>
+
+<a name="plancanvas"><h2>PlanCanvas</h2></a>
+
+Ok we constructed it X times before already, but here it is. The plancanvas is a rectangle on which appointments can be placed, created, moved and animated. It has the following parameters for the constructor :
+
+PlanCanvas(container,start_time,end_time,layout,handler,app_types,ddc,flags,x,y);
+
+<ul>
+<li>container is the html element you want it to appear in 
+<li>start_time corresponds to the left border (top for vertical plancanvas)
+<li>end_time corresponds to the right border (bottom for vertical plancanvas)
+<li>handler is the callback function you implement to handle updates
+<li>app_types are the possible appointment types as an array
+<li>optional x, untested, to have an ofsset of x inside the container
+<li>optional y, untested, to have an ofsset of y inside the container
+</ul>
+
+Most important parameter here is handler , which we until now assigned the ignore function, which does nothing;)
+However i see no application where you would not want to act upon creation and movement of appointments whith some kind of action. Here is a <a href="plancanvas.html">simple sample</a> that shows how it works.
+
+<a name="appointment"><h2>Appointment</h2></a>
+
+Appointments are created automatically when you push the mouse button on a plancanvas, but it would be nice to be able to create them manually as well. 
+Any plancanvas therefore maintains a list of appointments which you can add to or delete from at will. Later on also movement and animation will be implemented for appointments.
+
+You add Appointments by creating them with the plancanvas as first parameter:
+
+<pre>
+    // add an appointment :
+    start += 1 * 24 * 3600;
+    end = start + 1 * 6 * 3600;
+    var app2 = new Appointment(pc1, start, end, types[0], "id1");
+    app2.set_text("text only",false);
+    var app3 = new Appointment(pc2, start, end, types[1], "id2");
+    app3.set_text("extra text<br>",true);
+    var app4 = new Appointment(pc3, start, end, types[2], "id3");
+    app4.set_text("",false);
+
+    // delete it again? either a single Appointment:
+    //app2.clear();
+    //or the complete PlanCanvas:
+    //pc4.clear();
+</pre>
+
+<a href="appointment.html">appointment example</a>
+
+The list of appointments is internally used to prevent overlap etc, but you can also disable these checks and implement it yourself by querying the appointment list per canvas:
+
+<pre>
+    var napps = pc.appointment_count()
+    var app2 = pc.appointment_get(1)
+    pc.appointment_del(2);
+    pc.del_appointments(); // delete all
+</pre>
+
+The appointments will be added in order of creation.
+
+<a name="label"><h3>label text</h3></a>
+
+Appointments can get a text associated with them by using the function 
+
+<pre>
+Appointment.set_text(txt,showtimes[,after]). 
+</pre>
+
+Showtimes can be used to disable the times inside the appointment if you need more space. You can also use this function with an empty string to have 'empty' appointments. The canvas's above have text-only, text and time and clean set. The optional parameter after can be used to have the text show after instead of before the times.
+
+If you wonder how the data in previous examples is displayed, see the <a href="#debug">debug section</a>.
+
+<a name="debug"><h1>Debug</h1></a>
+there is a handy debug function available based on 'reflection' in javascript called print_attributes(). You need to create a Debug object specifying an output html element. And then call print_attributes(object) on the debug object :
+
+<pre>
+function show_app()
+{
+	var outdiv=document.getElementById("s7");
+	var app1 = bluecanvas.appointment_get(0);
+
+	var debug = new Debug(outdiv);
+	debug.print_attributes(app1);
+}
+</pre>
+
+<a name='options'><h1>Options</h1></a>
+
+The options flags is used to alter behaviour of the PlanCanvas. It con be passed as the optional 8th parameters of the PlanCanvas constructor. <br>
+These flags are defined, and of course the names imply that the defaults are just the opposite: 
+
+<ul>
+<li>PlanCanvas.FLAG_VERTICAL=0x01, makes the orientation of the plancanvas vertical (outlook style) instead of the default horizontal.
+<li>PlanCanvas.FLAG_NOMOVE  =0x02, disables movement of appointments within the canvas by the user. 
+<li>PlanCanvas.FLAG_NOCREATE=0x04, disables creation of new appointments on the canvas.
+<li>PlanCanvas.FLAG_NOCROSS =0x08, disables moving appointments to other plancanvas's. This disables both dragging from AND to the plancanvas.
+<li>PlanCanvas.FLAG_OVERLAP =0x10, allow overlapping appointments. By default if you do an action that results in overlapping appointments, that acton is reverted.
+<li>PlanCanvas.FLAG_NORESIZE =0x20, allow movement of appointments but not resize.
+</ul>
+
+These flags can be or'ed together enabling multiple options.
+
+<a href="vert.html">example of poptions and vertical plancanvas</a>
+
+<a name="styles"><h1>Styles</h1></a>
+
+Some visible objects in feyenoord have a className associated with it plus an optional className you provide, for now the default classNames are :
+
+<table border=1>
+<tr><th>object<th>className
+<tr><td>PlanCanvas<td>plancanvas
+<tr><td>AppType<td>appointment
+<tr><td>Legend<td>legend
+<tr><td>Timelines<td>timeline
+<tr><td>MenuItems<td>menuitem
+</table>
+
+Except for AppType's mostly it is the object class name in lowercase.
+
+Whenever you create an Object with the optional className, (for instance a plancanvas with classname "mystyle"), on the javascript level the className of every instance will be "plancanvas mystyle" so you classname is added to the default classname. On a CSS level you specify those classes with the dot notation :
+
+<pre>
+.plancanvas.mystyle{ background: red; }
+.mystyle.plancanvas{ background: green; }
+</pre>
+<b>do NOT leave spaces between the classes</b><br>
+
+Both notations will work, though i don't know what takes precedence in this case.
+
+But you can also use one style for all plancanvases' :
+
+<pre>
+.plancanvas {
+    background: blue;
+}
+</pre>
+
+Or one style for appointments and plancanvas's :
+<pre>
+.mystyle {
+    background: blue;
+}
+</pre>
+
+Of course when you mix these styles the most specific match will take precedence.
+
+<a name="lay_app"><h2>CanvasLayout and Appointments</h2></a>
+
+Appointments can be set to look like anything with appointment styles (see below) but the size is solely determined by the PlanCanvas it is on (or rather the CanvasLayout of the PlanCanvas). When you drag an appointment from one to another plancanvas, its width and it's height can change and even its orientation, because all those properties rely on the scale, margins and orientation of the plancanvas.
+<br>
+One exception is borders on Appointments, ideally this would be an issue of the appointment itself and not the CanvasLayout it is on. But since people seem to want 'partial' borders (so in the direction of the orientation only, or perpendicular only) the borders have to be switched when switching orientation. And maybe more important, there is the issue of IE vs the rest of the world, placing borders inward vs outwards. This calls for recalculation of the sizes browser-independently and this also is easier from the CanvasLayout.<br>
+So now Appointment types can be set to have two borderwidths (and colors), and the CanvasLayout will place them where they should. You set them with two functions: 
+
+<pre>
+AppType.set_rails(wid, color); // borders in the movement direction
+AppType.set_stops(wid, color); // borders in perpendicular to  movement direction
+</pre>
+
+Since the orientation can change we cannot use vertical and horizontal, so for lack of a better name the borders along the time scale are called rails and the ones perpendicular to time are stops. The Appointment types in the example below are made with calles like :
+
+<pre>
+	railborders.set_rails(6,"black");
+	stopborders.set_stops(1,"white");
+	both.set_rails(5,"red");
+	both.set_stops(5,"blue");
+</pre>
+
+<br>
+Also the canvases have different scale and/or orientation so you should see the size change when you drag between them. 
+<br>
+
+<a href="borders.html">borders example</a>
+
+<a name="comm"><h1>Server communication</h1></a>
+
+Feyenoord has different levels if support for communication with serverside scripts. The highest level is using JSON messages, somewhat lower is sending raw messages and of course you can also do it completely yourself;)
+
+First note that ajax means <b>asynchronous</b> javascript and xml, but first we don't use xml, and second : we rarely use asynchrounous messages. The reason that ajax is used is mostly to not have a page update, which can be done easily with a synchronous call. That's why i implemented both get_async() and get_sync() as methods to both Contexts.
+<br>
+So it's actually more sjaj (sync js and json) than ajax.
+<br>
+To send raw data you use the AjaxContext, and to send Json message the JsonContext. 
+
+<a name="ajax"><h2>AjaxContext</h2></a>
+
+The AjaxContext object handles browser independent setup of ajax communication, and the actual transactions. It sends data in the familiar key=value fashion of GET requests. 
+
+The main setup for an async ajax communication is (client side):
+
+<pre>
+function handler(txt,localdata)
+{
+    // handle txt 
+}
+
+...
+    var script = "tut.php";
+    ac = new AjaxContext(script);
+
+    data="what i want to send";
+    localdata="what i might need in the handler";
+    ac.get_async(handler,data,localdata);
+...
+</pre>
+
+As you see it's quite a hassle to get your data through to the handler function so only use if you realy need asynchrounous transactions
+
+<br><input type='submit' onmouseup="ajax_async()" value="async example"></input><br>
+<div id="a1" style="background: red">result from server ?</div>
+
+First decide if you really want (need) asynchronous communication, because if you don't (very often) the sync version is a lot simpler. You don't have to give a handler function, but just get_sync() and retrieve the data.
+
+<pre>
+...
+    var script = "tut.php";
+    ac = new AjaxContext(script);
+
+    data="cmd=multiply?fac1=11&fac2=5";
+    txt = ac.get_sync(data);
+    // handle txt
+...
+</pre>
+
+<br><input type='submit' onmouseup="ajax_sync()" value="sync example"></input><br>
+<div id="a2" style="background: red">result from server ?</div>
+
+But so much for the stone age, read on for a more sphisticated method.
+
+<a name="json"><h2>JsonContext</h2></a>
+
+The JsonContext is made to let you pass any number of objects to the server scripts and pass any number back.<br>
+I wanted this to be flexible yet not impose any message format on the user so i came up with a generic message wher you can add any number of objects to and just pick those objects up on the other side.
+
+With <a href="http://www.json.org">json</a> this is easy as long as you have a serverside technology that can understand json. I use php which knows json, so you can really pass an object transparently to the server side and back.
+<br>
+At the javascript side you add objects to the JsonContext, and issue a 'get' operation providing a command to dispatch at the server side.
+The serverside script retrieves the object(s) and processes them and then does much the same as the clientside script: add objects and issue a 'put'.
+The client side then retrieves the object(s) again.
+The objects are sent as an array back and forth because you regularly need more than one object to be passed. So it is easier to say (client-side) :
+
+<pre>
+add_object(o1); 
+add_object(o2); 
+</pre>
+
+and (serverside):
+
+<pre>
+o1 = get_object(0); 
+o2 = get_object(1); 
+</pre>
+
+Then constructing an array, or more complex object everytime. Json is used at both ends to pass the data, but also to construct a native object, so you pass a javascript object to the JsonContext and retrieve a PHP object on the server.
+<br>
+Right now, only a php-JsonContext is implemented on the server. You can use that by including "ajax.php" in serverside scripts. Of course if you use a different serverside language, you need to implement get_object(). add() and so on.
+<br>
+
+To pass the data, a default message is used.
+The message used takes on a standard form :
+
+<pre>
+function JsonMessage(cmd,data)
+{
+    var ob = new Object();
+    ob.cmd = cmd;
+    ob.status = "ok"; // mostly a return status
+    ob.payload = new Array();
+    ob.payload[0] = data;
+
+    this.stringified = function()
+    {
+        return JSON.stringify(ob);
+    }
+}
+</pre>
+
+You rarely need to fill the JsonMessage manually, just use the functions:
+
+<ul>
+<li>add_object()
+<li>get_object()
+<li>get_sync()
+<li>get_async()
+<li>put()
+</ul>
+
+Both get and put messages have the same format but are physically different messages!. So don't expect objects to be passed back again.
+
+Since php is the most likely candidate for the serverside handler, here is the server side class that receives the data.
+
+<pre>
+class JsonMessage
+{
+    var $cmd;
+    var $status="ok";
+    var $payload = Array();
+
+    function JsonMessage($cmd,$txt)
+    {
+        $this->cmd = $cmd;
+        $this->add($txt);
+    }
+
+    function add($msg) {
+        array_push($this->payload, $msg);
+    }
+}
+</pre>
+
+Here are some examples of a Json transaction.
+
+<pre>
+// a test object to send
+function testobj()
+{
+    this.name="test object";
+    this.num=20;
+}
+</pre>
+
+<input type='submit' onmouseup="json_object()" value="show object"></input><br>
+<div id="a3" style="background: red">object to be sent ?</div>
+
+An example of passing structured data to AND from the server:
+
+<pre>
+function json_stringified()
+{
+    var jc = new JsonContext("tut.php");
+    var jm = new JsonMessage("echo",to);
+
+    // add another
+    jm.add_object(to2);
+
+    jm2 = jc.get_sync(jm);
+    r = jm2.get_object(1);
+    pa(r);
+}
+</pre>
+
+With the servside PHP  :
+<pre>
+class returnobj
+{
+    function returnobj($x,$y) 
+    {
+        $this->x =$x;
+        $this->y =$y;
+    }
+}
+
+$a = new returnobj("a", 11);
+$b = new returnobj( 22, "b");
+
+if ($json) {
+    $jm = new JsonMessage($json);
+
+    switch($jm->cmd) {
+        case "echo":
+            $e = new JsonResult("ok","rval",$a);
+            $c = $jm->get_object(1);
+            $b->x *= $c->num;
+            $e->add_object($b);
+        break;
+        default:
+            echo "unknown command";
+        break;
+    }
+    $e->put();
+}
+</pre>
+
+The server script adds two objects, and you get_object() the second one, 0 would be the first.
+
+<input type='submit' onmouseup="json_stringified()" value="show result from server"></input><br>
+<div id="a4" style="background: red">result from server ?</div>
+
+<a name="decoration"><h1>Decoration</h1></a>
+
+Decorations are visible objects in the plancanvas that are used to add dividers or text to clarify the timescale of the plancanvas. Examples are dates hourticks etc. These can be added with the add_timelines() function and style through css.
+
+The next chapters will handle some of the options.
+
+<h3>Timelines, blocks and text</h3>
+
+For now all decoration is implemented with the same construct: a div element that is stretched according to the scale of the plancanvas. How it looks is up to your style sheets and CanvasLayout. 
+
+<pre>
+    var cl_b = new CanvasLayout(1800,"brownstyle");
+    var cl_g = new CanvasLayout(3600,"greenstyle");
+
+    var start = last_midnight();
+
+    cl_b.add_timelines(start,start+1800,1800,1,"hourlines");
+    cl_b.add_timelines(start,start+1800,1800,0,"halfhours");
+    cl_b.set_timefunc(my_timefunc);
+    cl_g.add_timelines(start,start+24*3600 24*3600,1,"daylines");
+    cl_g.add_timelines(start,start+24*3600,24*3600,1,"daylines2");
+
+    // day
+    var pc1 = new PlanCanvas(d,start,start+ 1*24*3600,cl_b,ignore,types,ddc);
+    // week 
+    var pc2 = new PlanCanvas(d,start,start+ 7*24*3600,cl_g,ignore,types,ddc);
+</pre>
+
+style sheet :
+
+<pre>
+.timelines.daylines {
+    background-image:url("rock-brown.jpg");
+    text-align: center;
+	height: 100%;
+    width: 100%;
+}
+
+.timelines.daylines2 {
+    background-image:url("rock-red.jpg");
+    text-align: center;
+	height: 100%;
+    width: 100%;
+}
+
+.timelines.hourlines {
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+    font-size: 10px;
+    text-align: center;
+	background-image: url("rock-brown.jpg");
+    border-left: 2px solid black;
+	height: 20;
+}
+
+.timelines.halfhours {
+	margin-top: 15px;
+	height: 5px;
+    border-left: 1px solid black;
+}
+</pre>
+
+<a href="decoration.html">decoration example using these</a>
+
+The function add_timelines :
+
+<pre>
+CanvasLayout.add_timelines(start,freq,string,id);
+</pre>
+
+Is setting the parameters for a timeline pattern, start means what the synchronisation point is, it can any point in time but all intervals will be relative to that point. 
+gap is the interval to use in seconds, so start=60, gap=3600 means 1:01,2:01,3:01 ... etc
+string is the freqency with wich a date string is printed, this is often not in every timeline but once every X times. if you make this 0 or undefined no strings will be printed.
+id is the css_id used for the appearence of the timeline.
+If you add more timelines they will be used alternately so you can make patterns of alternating colours or big and small lines by adding morw timelines.
+
+<h2>time/date</h2>
+
+Default behaviour if you add a timeline is to print a short date string if the gap provided is bigger than 1 day, and hour/minute (hh:mm) format if smaller.
+
+But you can override that by providing your own function with CanvasLayout.set_dateformat(function). For instance, if you want to print the hours but without the minutes this function will do:
+
+<pre>
+function my_timefunc(t)
+{
+	var d = new Date(t*1000);
+	h = d.getHours();
+
+	return h;
+}
+cvslayout.set_timefunc(my_timefunc);
+
+</pre>
+
+
+<h2>Appointment decoration</h2>
+
+Appointments get the classname .appointment. Besides that you can use the 'id' parameter in the Appointments constructor to couple it with a style sheet entry.
+For instance :
+<pre>
+.appointment{
+    background: "blue";
+}
+.appointment.nothing {
+    background-image:url("rock-brown.jpg");
+}
+</pre>
+
+Will make all appointment with no known id blue and have the brown rock image for the ones you create like:
+<pre>
+	...
+    var app = new Appointment(pc1, start, end, types[0], "nothing");
+</pre>
+
+Some parameters however are difficult to do via stylesheets such as width and borders. There are more reasons for this:
+
+<ul>
+<li>The orientation can be different and thus width and height have different meaning for different plancanvases.
+<li>You cannot set the width of an appointment because it is dependent on the plancanvas it is on, so that should be set on the plancanvas, not the appointment.
+<li>The border-in / border-out problem of IE vs all other browsers. It is best to calculate this in javascript.
+</ul>
+
+<a name="popup"><h1>Popup</h1></a>
+
+For various purposes, a popup implementation is included. Since not everybody wants this as a default a couple of functions is provided to add behaviour to contextmenus on plancanvas as well as Appointment objects.
+The ideas is that you can use the generic popup object to add your own functions, or use one of the default menu options already implemented. Of course you can also mix them.
+<br>
+If you don't create a popup menu on an object, it is not used, otherwise you get an empty popup to which you can add menuitems, an example not related to PlanCanvas or Appointment is just a generic menu  on the grey DIV elements below.
+Note that option "vierde" mentions on what div you used the (same) Popup !
+<br>
+<div id="p1" style="background: grey; width: 700; height: 200;"></div>
+<div id="p2" style="background: lightgrey; width: 700; height: 200;"></div>
+
+If you get the normal popup of the browser (besides this one) you have to enable the browser to overwrite the contextmenu, on firefix that is in preferences->content->javascript->advanced.
+
+The code to build this, (style information excluded) is :
+
+<pre>
+function eerste() { alert ("eerste"); }
+function tweede() { alert ("tweede"); }
+function derde() { alert ("derde"); }
+function custom(target,data) { 
+    alert ("custom function data = " + data + " on the " + target.innerHTML + " div "); 
+}
+
+function main()
+{
+    popbase= document.getElementById("p1");
+    popbase2= document.getElementById("p2");
+
+    popbase.innerHTML="dark";
+    popbase2.innerHTML="light";
+
+    mi1 = new MenuItem("eerste", eerste, "bluestyle");
+    mi2 = new MenuItem("tweede", tweede, "redstyle");
+    mi3 = new MenuItem("derde", derde, "brownstyle");
+    mi4 = new MenuItem("vierde", custom, "greenstyle");
+
+    mi4.set_data("custom data");
+
+    var mis = new Array( mi1, mi2, mi4);
+    var pop = new PopupMenu(mis);
+
+    popbase.oncontextmenu=pop.trigger_popup;
+    popbase2.oncontextmenu=pop.trigger_popup;
+
+    pop.add_menuitem(mi3);
+}
+</pre>
+
+Creating a PopupMenu like this will install a Popupmenu wich you can use on different elements, though it will only be visible on 1. The above example uses the same Popup on two separate divs, and passes the elements on which the contextmenus was set as 'target' parameter to the menu handler function ('custom').
+<br>
+The handler function receives two parameters: one specific to the surface (or object) on which the popup was invoked (say, an appointment) and one specific to the menuitem selected (say, an appointment type).  The first parameter defaults to the element on which the menu was 'popped up', the second has no appropriate default and you have to set it manually with the MenuItem.set_data() function.
+There is no Popup.set_data() equivalent because you need to have to call it again for every element the popup was started from. (see the dark / light example above). Better attach your data to that element and retrieve it through the default parameter of the handler.
+<br>
+The example shows two ways of adding menuitems: as an array of menuitems passed to the PopupMenu constructor, or with the PopupMenu.add_menuitem() function. This last function allways adds the new menuitem to the bottom. The o parameter is the object where you clicked, ion this case just the gray div. 
+<br>
+Feyenoord objects like PlanCanvas and Appointment have prefabricated options you can use like shifting weeks back and forth, deleting and changing appointments etc. There is a number of function you can use to build up the menu's. Two flavours exist plancanvas menus and appointment menus, which are both created on the plancanvas.
+
+To create an appointment menu use PlanCanvas.set_appointmentmenu(). It returns a handle to the menu on which you can invoke menu items creation functions like:
+
+<ul>
+<li>add_delete_item(caption,className), adds a line the deletes the appointment in question when selected. caption and classname are used to name and style the menu option.
+<li>add_apptype_items(), adds a line for every appointmenttype of the plancanvas and changes the type of the appointment when selected. 
+<li>add_menuitem(mi), adds a custom MenuItem() object you created yourself
+</ul>
+
+<pre>
+    var appmenu = pc1.set_appointmentmenu();
+    appmenu.add_delete_item("verrrrwijder");
+    appmenu.add_apptype_items();
+    var mi = new MenuItem("own added option", yo, "bluestyle");
+    appmenu.add_menuitem(mi);
+</pre>
+
+For the plancanvas itself there is a different popupmenu, with only custom options for now.
+
+<pre>
+    var menu = pc1.set_menu();
+    menu.add_apptype_items();
+    var mi = new MenuItem("own added option", yo, "bluestyle");
+    menu.add_menuitem(mi);
+</pre>
+
+These are the typical line based menu options for now, more elaborate things can only be implemented using other layouts, which probably involves creating different Menus like CalendarPickMenu(). This all will  be done later.
+
+<a href="popup.html">Here</a> Is an example plancanvas using menus for both apps and the pc itself.
+
+<a name="animation"><h1>Animation</h1></a>
+
+How far we can take this is dependent on the limits of the javascript engine inside modern browsers. 
+
+Here is a demo, wich should mix 3 animations, one moving an appointment left within 3 seconds, a second making it visible gradually also within 3 seconds and the third resizing it within 6 seconds. 
+As you see while the animation runs you can still create new appointment with the mouse.
+
+<a href="animation.html">Animation demo</a>
+
+First, let's make clear that transformation is between states of existing objects, so you don't fade the object 'into existence' but you create it transparent and then fade it into view.
+
+The appointment type used in this demo already has a style with 40% opacity so that is the limit it will achieve. The relevant code for this is :
+
+<pre>
+function move_app(app, val)
+{
+    app.move(val);
+	//dom_set_left (app.domelm,val);
+}
+
+function resize_app(app, val)
+{
+    app.resize(val);
+}
+
+function fade_app(app, val)
+{
+	global.browser.set_opacity (app.domelm,val/100);
+}
+
+    var a1  = new Animation(move_app,app,  start+12*3600, start, 3000.0, new BounceEffect(start+12*3600,start,3000.0));
+    var a2 = new Animation(fade_app,app,  0,  100,          3000.0);
+    var a3 = new Animation(resize_app,app,3600, 4*3600,       6000.0);
+    a2.go();
+    a3.go();
+    a1.go();
+</pre>
+
+Note that on function move_app here is a function commented out :
+
+<pre>
+	//dom_set_left (app.domelm,val);
+</pre>
+
+It is here to show another way of animating 'by hand'. But if you use this way of moving, you have to manually translate the times back to percentages etc, so its better to use Appointment.move() for that. 
+
+This is about as generic as possible, since you have to know what members of what objects have to get which values. Sometimes its a style member, sometimes the values are floats, sometimes discrete. So a function for setting them is the most flexible way. An Animation object is created with the following constructor:
+
+<pre>
+    Animation(alter_function, object, startvalue, stopvalue, ms_duration[,animationstyle,[wrapupfunction]]);
+</pre>
+
+<ul>
+<li>alter_function is the user function where the intermediate values are assigned to the object.
+<li>object is the object that is involved, which is passed as the first parameter of the alter_function.
+<li>start is the initial value of the object when starting the transformation
+<li>stop is the desired value of the object when the transformation is done
+<li>ms_duration is the time in milliseconds that the total animation/transformation should take. 
+<li>optional parameter is the style of animating, at this moment there are 3 styles, which will be discussed later : linear, bezier and bounce. bezier is the default.
+<li>also optional is the wrapupfunction which can be used if you want synchronisation. Normally go() directly returns, and the animation will start 'in the background'. The wrapupfunction is executed after the animation ended.
+</ul>
+
+<h2>Animation Effects</h2>
+
+AnimationEffect is an interface wich you can use to implement a new Effect, the basic ideas is that you define the steps in which the animation traject (start to stop) is traversed as an array of fractions between 0.0 (start) and 1.0 (stop).
+Since there is a (sort of) optimum timeout value that creates 'smooth' animations, that value is fixed in the constant Animation.smooth_ms (40 ms at the time of writing).
+So to create an animation in the time you want you can calculate the number of steps by dividing the total time by Animation.smooth_ms. 
+The animation now just recalculates the animation values step by step, and there is no checking so if you want to exceed the 0.0-1.0 interval be free to do so, also you are free to start and end wherever you want. 
+
+Of course the precalculated AnimationEffect's do start at 0.0 and end at 1.0, they are :
+
+<ul>
+<li>LinearEffect, of course just a linear division from 0.0 to 1.0
+<li>BezierEffect, uses a bezier curve for an accelerating and decelarating effect in the animation.
+<li>BounceEffect, creates a bouncing effect. The timing parameter in this effect does not work, since it doing any distance in the same amount of time looks very unnatural. Better tune the bounce with the speed (the higher the faster), and dissipation parameters. Dissipation is the amount in which the bounce 'dies out', 2 means half the distance every bounce, must be integer and 3 (the default) seems to give the best result. 
+constructor : BounceEffect(start,stop,speed,dissipation)
+</ul>
+
+To create custom effects make a new Effect object implementing the following member and method:
+
+steps an integer value that is the number of 40ms steps this effect will take.
+calc(), calculate and return the array of fractions between 0.0 and 1.0 that make up the effect. 
+
+<h1>Canvas Animation</h1>
+
+There is also some provision made for effects that surpass the basic 'div', such as sliding a new plancanvas into view. The way that works is with the 'backdiv' and 'viewport' div. The latter hiding part of the former. 
+To be able to do both horizontal and vertical animation the backdiv is 4 times  (2x2) the viewport div. So typically you take these steps :
+
+<ol>
+<li>place the current content div at the correct position on the backdiv, say left-top if you want to animate something shifting into view from the right.
+<li>position the backdiv left-top almost directly after it so you don't see the shift.
+<li>create a new small sized backdiv with the fresh content
+<li>place it at the right-top of the backdiv
+<li>run the animation by altering the style.left
+</ol>
+
+This gives an effect like :
+
+<a href="anim2.html">Shift demo</a>
+
+<a name="gwt"><h1>Gwt</h1></a>
+
+These are the google web toolkit wrappers for PlanCanvas and (later) GraphCanvas. For now here is a demo page, you'll need the source code to figure out how to use.
+
+<a href="../gwt/war/GwtExample.html">gwt demo</a>
+
+<a name="graph"><h1>Graph</h1></a>
+
+<a href="graph.html">graph demo</a>
+
+<div id="anim3"></div>
+<div id="anim4"></div>
+</body>
+</html>

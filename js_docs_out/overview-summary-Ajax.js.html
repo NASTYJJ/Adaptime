@@ -1,0 +1,654 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="Ajax.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>Ajax.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		Contains all objects and functions used to encode/decode messages and
+	to send to or receive from a server using asynchrounous xml and javascript
+  or AJAX<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="AjaxContext.html">AjaxContext</a></b></td>
+    <td>Context used for 1 ajax communication session, you can reuse it if
+    used synchronous.</td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="AjaxQueue.html">AjaxQueue</a></b></td>
+    <td>due to browser limits (two connections ?) this que can be used for all
+ messages using one AjaxContext.</td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="JsonContext.html">JsonContext</a></b></td>
+    <td>Context used for 1 ajax communication session with JsonMessage's, 
+ data is always json'ized as a JsonMessage and returned as a JsonResult
+ </td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="JsonMessage.html">JsonMessage</a></b></td>
+    <td>Formalized message used to send data to server scripts
+ </td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="JsonResult.html">JsonResult</a></b></td>
+    <td>Formalized message used to return data from server scripts
+ </td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+	<a name="method_summary"><!-- --></a>
+	<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+			<td colspan=2>
+				<font size="+2">
+					<b>Method Summary</b>
+				</font>
+			</td>
+		</tr>
+	
+		
+		   <tr bgcolor="white" class="TableRowColor">
+		      <td align="right" valign="top" width="1%">
+			 <font size="-1">
+			    <code>static&nbsp;void</code>
+			 </font>
+		      </td>
+		      <td>
+			 <code>
+			    <b>
+			       <a href="GLOBALS.html#!s!SssQueue">SssQueue</a></b>(handler)
+			 </code>
+			 <br>
+			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 
+		      </td>
+		   </tr>
+		
+	
+	</table>
+    <p>
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/** <span class="attrib">@fileoverview</span> 
+ *	Contains all objects and functions used to encode/decode messages and
+ *	to send to or receive from a server using asynchrounous xml and javascript
+ *  or AJAX
+ */</span>
+<span class="comment">/**
+ * <span class="attrib">@class</span> Formalized message used to send data to server scripts
+ * <span class="attrib">@param</span> {String} cmd Command used to dispatch at the serverside
+ * <span class="attrib">@param</span> {String} data Object to use as first (or only) data array member
+ * <span class="attrib">@requires</span> Json
+ */</span>
+<span class="reserved">function</span> JsonMessage(cmd,data)
+{
+	var ob = new Object();
+	ob.cmd = cmd;
+	ob.payload = new Array();
+
+    <span class="reserved">if</span> (data) {
+	    ob.payload[0] = data;
+    }
+
+    <span class="comment">/**
+     * Return complete message as stringified json
+     * <span class="attrib">@return</span> {String} object as a json string
+     */</span>
+	<span class="reserved">this</span>.stringified = <span class="reserved">function</span>()
+	{
+		<span class="reserved">return</span> JSON.stringify(ob);
+	}
+
+    <span class="comment">/** 
+      * Clear object array 
+      */</span>
+    <span class="reserved">this</span>.clr_objects = <span class="reserved">function</span>()
+    {
+	    ob.payload = new Array();
+    }
+
+    <span class="comment">/** Add new object to the object array 
+      * <span class="attrib">@param</span> {Object} o Object to place at the end
+	  */</span>
+    <span class="reserved">this</span>.add_object = <span class="reserved">function</span>(o)
+    {
+        nitems=ob.payload.length;
+        ob.payload[nitems] = o;
+    }
+
+    <span class="comment">/** 
+     * Set object at array position
+     * <span class="attrib">@param</span> {Number} n Position in the object array
+     * <span class="attrib">@param</span> {Object} o Object to place at n
+     */</span>
+    <span class="reserved">this</span>.set_object = <span class="reserved">function</span>(n,o)
+    {
+        ob.payload[n] = o;
+    }
+}
+
+<span class="comment">/**
+ * <span class="attrib">@class</span> Formalized message used to return data from server scripts
+ * <span class="attrib">@param</span> {String} msg Json formatted string containing the return message
+ */</span>
+<span class="reserved">function</span> JsonResult(msg)
+{
+	var ob = JSON.parse(msg);
+
+    <span class="comment">/** 
+     * Return the status of the JsonResult
+     */</span>
+    <span class="reserved">this</span>.get_status = <span class="reserved">function</span>()
+    {
+        <span class="reserved">return</span> ob.stat;
+    }
+
+    <span class="comment">/** 
+     * get the N-th object returned from the server
+     * <span class="attrib">@param</span> {Number} object comes from position n in the object array
+	 */</span>
+    <span class="reserved">this</span>.get_object = <span class="reserved">function</span>(n)
+    {
+        <span class="reserved">return</span> ob.payload[n];
+    }
+}
+
+<span class="comment">/**
+ * <span class="attrib">@class</span> Context used for 1 ajax communication session, you can reuse it if
+    used synchronous. But if you want simultaneous messages you 
+    need to instantiate another AjaxContext
+ * <span class="attrib">@param</span> {String} sc complete url of the serverside script
+ */</span>
+<span class="reserved">function</span> AjaxContext(sc,domelm)
+{
+	var thisobj=<span class="reserved">this</span>;
+    var xmlhttp = false;
+	<span class="comment">/** <span class="attrib">@ignore</span> */</span>
+	<span class="reserved">this</span>.sc = sc;
+	var triggerfunction;
+	var udata = <span class="literal">"hoi"</span>;
+	<span class="comment">/** <span class="attrib">@ignore</span> */</span>
+	<span class="reserved">this</span>.domelm=domelm;
+	
+    <span class="comment">// &lt; Cross-Browser defining of the xmlhttprequest object &gt;</span>
+    try {
+            xmlhttp = new ActiveXObject( <span class="literal">"Msxml2.XMLHTTP"</span> );
+    } catch (e) {
+        try {
+                xmlhttp = new ActiveXObject( <span class="literal">"Microsoft.XMLHTTP"</span> );  <span class="comment">// IE</span>
+        } catch (E) {
+                xmlhttp = false;
+        }
+    }
+
+    <span class="reserved">if</span> ( !xmlhttp ) {
+        xmlhttp = new XMLHttpRequest();
+    }
+
+    <span class="comment">/** set userdata to be passed to asynchonous handler */</span>
+	<span class="reserved">this</span>.set_udata = <span class="reserved">function</span>(data) { udata = data; }
+
+    <span class="comment">/** 
+      * return ajax state 
+      * <span class="attrib">@return</span> {Number} current state
+      */</span>
+    <span class="reserved">this</span>.state = <span class="reserved">function</span> ()
+    {
+        <span class="reserved">return</span> xmlhttp.readyState;
+    }
+
+    <span class="comment">/** 
+      * return responseText 
+      * <span class="attrib">@return</span> {String} current responsetext
+      */</span>
+    <span class="reserved">function</span> text()
+    {
+        <span class="reserved">return</span> xmlhttp.responseText;
+    }
+
+    <span class="reserved">function</span> raw_get ()
+	{
+	    <span class="reserved">if</span> (xmlhttp.readyState==4) {
+			<span class="comment">//alert (xmlhttp.responseText);</span>
+			<span class="comment">//dp (xmlhttp.responseText);</span>
+			<span class="reserved">if</span> (udata) 
+				triggerfunction(xmlhttp.responseText,udata);
+			<span class="reserved">else</span>
+				triggerfunction(xmlhttp.responseText);
+		}
+	}
+	
+	<span class="comment">/** abort an ajax request */</span>
+	<span class="reserved">this</span>.abort = <span class="reserved">function</span>()
+	{
+		try {
+        	xmlhttp.abort(null);
+		} catch(e) {
+			alert(e);
+		}
+	}
+
+	<span class="comment">/** get the data raw (not json encoded) */</span>
+    <span class="reserved">this</span>.get_raw = <span class="reserved">function</span> (cb,data,udata)
+    {
+        var ret;
+		url = <span class="reserved">this</span>.sc;
+        url += <span class="literal">'?'</span> + data;
+		<span class="reserved">this</span>.set_udata(udata);
+
+		try {
+        	xmlhttp.open( <span class="literal">"GET"</span> , url, true);
+        	<span class="comment">// yes !!! microsoft again, force cache clean</span>
+        	xmlhttp.setRequestHeader(<span class="literal">"If-Modified-Since"</span>, <span class="literal">"Sat, 1 Jan 2000 00:00:00 GMT"</span>);
+        	ret = xmlhttp.onreadystatechange=cb;
+        	xmlhttp.send(null);
+		} catch(e) {
+			alert(e + <span class="literal">" for url "</span> + url );
+		}
+    }
+
+    <span class="comment">/** 
+      * get data from server and handle it asynchronous
+      * <span class="attrib">@param</span> {Function} ufunc The function in which you handle the data
+      * <span class="attrib">@param</span> {String} content The raw data string you want to pass to the server script
+      * <span class="attrib">@param</span> {Object} udata Extra data you want to be passed to the ufunc
+      */</span>
+	<span class="reserved">this</span>.get_async = <span class="reserved">function</span>(ufunc,content,udata)
+	{
+		triggerfunction = ufunc;
+		<span class="reserved">this</span>.get_raw(raw_get,content,udata);
+	}
+
+    <span class="comment">/** 
+      * get data from server synchronous and return the data
+      * <span class="attrib">@param</span> {String} content The raw data string you want to pass to the server script
+      * <span class="attrib">@return</span> {String} the complete returned server data
+      */</span>
+	<span class="reserved">this</span>.get_sync = <span class="reserved">function</span>(content,verbose)
+	{
+		url = <span class="reserved">this</span>.sc;
+        url += <span class="literal">'?'</span> + content;
+		<span class="reserved">if</span> (verbose)
+			alert(url);
+        xmlhttp.open( <span class="literal">"GET"</span> , url, false);
+        xmlhttp.setRequestHeader(<span class="literal">"If-Modified-Since"</span>, <span class="literal">"Sat, 1 Jan 2000 00:00:00 GMT"</span>);
+        xmlhttp.send(null);
+		<span class="reserved">if</span> (verbose)
+			alert(xmlhttp.responseText);
+        <span class="reserved">return</span> xmlhttp.responseText;
+	}
+
+    <span class="comment">/** 
+      * use ajax to see if a server page exists
+      * <span class="attrib">@param</span> {String} url The url you want to probe for reachability
+      * <span class="attrib">@return</span> {Boolean} true if reachable, false if not
+      */</span>
+    <span class="reserved">this</span>.exists = <span class="reserved">function</span>(url)
+    {
+        xmlhttp.open( <span class="literal">"GET"</span> , url, false);
+        xmlhttp.send(null);
+        <span class="reserved">if</span> (xmlhttp.status == 200) <span class="reserved">return</span> true;
+        <span class="reserved">else</span> <span class="reserved">return</span> false;
+    }
+}
+
+<span class="comment">/**
+ * <span class="attrib">@class</span> Context used for 1 ajax communication session with JsonMessage's, 
+ * data is always json'ized as a JsonMessage and returned as a JsonResult
+ * <span class="attrib">@param</span> {String} sc complete url of the serverside script
+ * <span class="attrib">@requires</span> Json
+ */</span>
+<span class="reserved">function</span> JsonContext(sc,domelm)
+{
+	var thisobj=<span class="reserved">this</span>;
+    var xmlhttp = false;
+	<span class="reserved">this</span>.sc = sc;
+    var ac = new AjaxContext(sc,domelm);
+
+
+    <span class="comment">/** 
+      * trigger the callback function
+      * <span class="attrib">@param</span> {String} res result 
+      */</span>
+	<span class="reserved">this</span>.cb=<span class="reserved">function</span>(res)
+	{
+        var msg = new JsonResult(res);
+		thisobj.triggerfunction(msg);
+	}
+	
+    <span class="comment">/** 
+      * get data from the server and handle it asynchronous
+      * <span class="attrib">@param</span> {Function} ufunc The function in which you handle the data
+      * <span class="attrib">@param</span> {String} jm the JsonMessage you want to send to the server script
+      * <span class="attrib">@param</span> {Object} udata Extra data you want to be passed to the ufunc
+      */</span>
+	<span class="reserved">this</span>.get_async = <span class="reserved">function</span>(ufunc,jm,udata)
+	{
+        getstring = <span class="literal">"json="</span>+jm.stringified();
+		thisobj.triggerfunction=ufunc;
+		ac.get_async(<span class="reserved">this</span>.cb,getstring,udata);
+		<span class="comment">//ac.get_async(ufunc,getstring,udata);</span>
+	}
+
+    <span class="comment">/** 
+      * get data from the server synchronous and return the data
+      * <span class="attrib">@param</span> {String} jm the JsonMessage you want to send to the server script
+      * <span class="attrib">@return</span> {String} the complete returned server data
+      */</span>
+	<span class="reserved">this</span>.get_sync = <span class="reserved">function</span>(jm,verbose)
+	{
+        getstring = <span class="literal">"json="</span>+jm.stringified();
+		res = ac.get_sync(getstring,verbose);
+        <span class="reserved">return</span> new JsonResult(res);
+	}
+}
+JsonContext.<span class="reserved">prototype</span> = new Class();
+
+<span class="comment">/**
+ * <span class="attrib">@class</span> due to browser limits (two connections ?) this que can be used for all
+ * messages using one AjaxContext.
+ */</span>
+<span class="reserved">function</span> AjaxQueue(handler)
+{
+	var self=<span class="reserved">this</span>;
+	self.handler=handler;
+
+	self.jc = new JsonContext(<span class="literal">"../sss.php"</span>); <span class="comment">// syncsession server script</span>
+
+	<span class="reserved">function</span> loop(e,dta)
+	{
+		var jr = new JsonResult(e);
+		var stat = jr.get_status();
+		var o = jr.get_object(0);
+		<span class="reserved">if</span> (stat == <span class="literal">"error"</span>) {
+			alert(<span class="literal">"socket broken, aborting!"</span>);
+			self.jc.abort();
+			<span class="reserved">return</span> false;
+		}
+		self.handler(e,dta);
+		self.install_handler(o,dta);
+	}
+
+	<span class="comment">/** subscribe to a topic with a sessionid
+ 	  * <span class="attrib">@param</span> {String} topic topic to subscribe to
+ 	  * <span class="attrib">@param</span> {int} sid session id number
+      */</span>
+	<span class="reserved">this</span>.subscribe=<span class="reserved">function</span>(topic,sid)
+	{
+		var jm  = new JsonMessage(<span class="literal">"subscribe"</span>, topic);
+		<span class="reserved">if</span> (!sid) sid=0;
+		jm.add_object(sid);
+		var msg = self.jc.get_sync(jm);
+		<span class="reserved">return</span> msg;
+	}
+	
+	<span class="comment">/** unsubscribe from the current topic 
+      */</span>
+	<span class="reserved">this</span>.unsubscribe=<span class="reserved">function</span>()
+	{
+		var jm  = new JsonMessage(<span class="literal">"unsubscribe"</span>, <span class="literal">""</span>);
+		var msg = self.jc.get_sync(jm);
+		<span class="reserved">return</span> msg;
+	}
+	
+	<span class="comment">/** setup a handler for a topic to listen to
+ 	  * <span class="attrib">@param</span> {int} sid session id number
+ 	  * <span class="attrib">@param</span> {String} udata user data
+      */</span>
+	<span class="reserved">this</span>.install_handler=<span class="reserved">function</span>(sid,udata)
+	{
+		var jm = new JsonMessage(<span class="literal">"listen"</span>, null);
+		jm.add_object(sid);
+		self.jc.get_async(loop,jm,udata);
+	}
+	
+	<span class="comment">/** start listening to a topic
+ 	  * <span class="attrib">@param</span> {Function} fnc handler function
+ 	  * <span class="attrib">@param</span> {int} sid session id number
+ 	  * <span class="attrib">@param</span> {String} udata user data
+      */</span>
+	<span class="reserved">this</span>.start_listening=<span class="reserved">function</span>(fnc,sid,udata)
+	{
+		self.install_handler(sid,udata);
+	}
+	
+	<span class="comment">/** put a message on the current topic
+ 	  * <span class="attrib">@param</span> {String} sm message
+      */</span>
+	<span class="reserved">this</span>.put_message = <span class="reserved">function</span>(sm) 
+	{
+		self.jc.abort();	 <span class="comment">// abort the async listener</span>
+		var msg = self.jc.get_sync();    <span class="comment">// do this synchronous</span>
+		self.start_listening(self.handler,sm); <span class="comment">// restart listener again</span>
+		<span class="reserved">return</span> msg;
+	}
+}
+
+<span class="comment">/** <span class="attrib">@ignore</span> not finished yet */</span>
+<span class="reserved">function</span> SssMessage(l,sid,count,ts,data)
+{
+	<span class="reserved">this</span>.length=l;
+	<span class="reserved">this</span>.session=sid;
+	<span class="reserved">this</span>.counter=count;
+	<span class="reserved">this</span>.timestamp=ts;
+	<span class="reserved">this</span>.data=data;
+}
+
+<span class="comment">// pure sync server queue</span>
+<span class="reserved">function</span> SssQueue(handler)
+{
+	var self=<span class="reserved">this</span>;
+	self.handler=handler;
+
+	self.jc = new JsonContext(<span class="literal">"../sss.php"</span>); <span class="comment">// syncsession server script</span>
+
+	<span class="reserved">function</span> loop(e,dta)
+	{
+		var jr = new JsonResult(e);
+		var stat = jr.get_status();
+		var sm = jr.get_object(0);
+		<span class="reserved">if</span> (stat == <span class="literal">"error"</span>) {
+			alert(<span class="literal">"socket broken, aborting!"</span>);
+			self.jc.abort();
+			<span class="reserved">return</span> false;
+		}
+		self.handler(e,dta);
+		self.install_handler(sm,dta);
+	}
+
+	<span class="reserved">this</span>.subscribe=<span class="reserved">function</span>(topic,sid,count)
+	{
+		<span class="reserved">if</span> (!sid) sid=0;
+		<span class="reserved">if</span> (!count) count=0;
+		var sm  = new SssMessage(topic.length,sid,count,0,topic);
+		var jm  = new JsonMessage(<span class="literal">"subscribe"</span>, sm);
+		var msg = self.jc.get_sync(jm);
+		<span class="reserved">return</span> msg;
+	}
+	
+	<span class="reserved">this</span>.unsubscribe=<span class="reserved">function</span>(sm)
+	{
+		var jm  = new JsonMessage(<span class="literal">"unsubscribe"</span>, sm);
+		var msg = self.jc.get_sync(jm);
+		<span class="reserved">return</span> msg;
+	}
+	
+	<span class="reserved">this</span>.install_handler=<span class="reserved">function</span>(sm,udata)
+	{
+		var jm = new JsonMessage(<span class="literal">"listen"</span>, sm);
+		self.jc.get_async(loop,jm,udata);
+	}
+	
+	<span class="reserved">this</span>.start_listening=<span class="reserved">function</span>(fnc,sm,udata)
+	{
+		self.install_handler(sm,udata);
+	}
+	
+	<span class="reserved">this</span>.put_message = <span class="reserved">function</span>(sm) 
+	{
+		self.jc.abort();	 <span class="comment">// abort the async listener</span>
+		var msg = self.jc.get_sync(sm);    <span class="comment">// do this synchronous</span>
+		self.start_listening(sm,self.handler); <span class="comment">// restart listener again</span>
+		<span class="reserved">return</span> msg;
+	}
+}
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Feb 19 19:00:18 2010</div>
+</body>
+</html>

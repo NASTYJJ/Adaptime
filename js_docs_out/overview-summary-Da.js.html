@@ -1,0 +1,303 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+ Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="Da.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="white" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top">
+<em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>Da.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		No overview generated for 'Da.js'<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="white" class="TableRowColor">
+    <td width="15%"><b><a href="Da.html">Da</a></b></td>
+    <td>dynamic array object
+    specifically if you need ordering, otherwise use the js hash
+   
+</td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+	<a name="method_summary"><!-- --></a>
+	<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+			<td colspan=2>
+				<font size="+2">
+					<b>Method Summary</b>
+				</font>
+			</td>
+		</tr>
+	
+		
+		   <tr bgcolor="white" class="TableRowColor">
+		      <td align="right" valign="top" width="1%">
+			 <font size="-1">
+			    <code>static&nbsp;void</code>
+			 </font>
+		      </td>
+		      <td>
+			 <code>
+			    <b>
+			       <a href="GLOBALS.html#!s!da_test">da_test</a></b>(n)
+			 </code>
+			 <br>
+			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 
+		      </td>
+		   </tr>
+		
+	
+	</table>
+    <p>
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/**
+  * <span class="attrib">@class</span> dynamic array object
+  *    specifically if you need ordering, otherwise use the js hash
+  */</span>
+<span class="reserved">function</span> Da()
+{
+	<span class="reserved">this</span>.data = new Array()
+	<span class="reserved">this</span>.length = 0
+
+	<span class="comment">/** 
+      * insert object at specified position
+      * <span class="attrib">@param</span> {Object} obj Object to insert
+      * <span class="attrib">@param</span> {Number} pos Position at which to insert Object
+      * <span class="attrib">@return</span> {Number}length of the array after insertion or -1 at error
+      */</span>
+	<span class="reserved">this</span>.ins= <span class="reserved">function</span>(obj,pos)
+	{
+		var t
+
+		<span class="reserved">if</span> (pos &lt; 0 || pos &gt; <span class="reserved">this</span>.length) <span class="reserved">return</span> -1
+
+		<span class="reserved">for</span> (t=<span class="reserved">this</span>.length; t&gt;= pos; t--) {
+			<span class="reserved">this</span>.data[t] = <span class="reserved">this</span>.data[t-1]
+		}
+		<span class="reserved">this</span>.data[pos]= obj
+		<span class="reserved">return</span> <span class="reserved">this</span>.length ++
+	}
+
+	<span class="comment">/**
+      * add an object at the end of the array
+      * <span class="attrib">@return</span> {Number}length of the array after insertion or -1 at error
+      */</span>
+	<span class="reserved">this</span>.add= <span class="reserved">function</span>(obj)
+	{
+		<span class="reserved">this</span>.ins(obj,<span class="reserved">this</span>.length)
+	}
+
+	<span class="comment">/**
+      * get object at the specified position in the array
+      * <span class="attrib">@param</span> {Number} pos Position at which to insert Object
+      * <span class="attrib">@return</span> {Object} the object
+      */</span>
+	<span class="reserved">this</span>.get = <span class="reserved">function</span>(pos)
+	{
+		<span class="reserved">if</span> (pos &lt; 0 || pos &gt; <span class="reserved">this</span>.length) <span class="reserved">return</span> null;
+		<span class="reserved">return</span> <span class="reserved">this</span>.data[pos];
+	}
+
+	<span class="comment">/**
+      * delete object at position pos, 
+      * <span class="attrib">@param</span> {Number} pos delete array element at this position
+      * <span class="attrib">@return</span> {Number} length of the array after deletion or -1 at error
+      */</span>
+	<span class="reserved">this</span>.del= <span class="reserved">function</span>(pos)
+	{
+		var t
+		<span class="reserved">if</span> (pos &lt; 0 || pos &gt;= <span class="reserved">this</span>.length) <span class="reserved">return</span> -1
+
+		<span class="reserved">for</span> (t=pos; t&lt; <span class="reserved">this</span>.length; t++) {
+			<span class="reserved">this</span>.data[t] = <span class="reserved">this</span>.data[t+1]
+		}
+		<span class="reserved">return</span> <span class="reserved">this</span>.length --
+	}
+
+	<span class="comment">/** return string comma seperated */</span>
+	<span class="reserved">this</span>.toString = <span class="reserved">function</span>()
+	{
+		var t
+
+		var str = <span class="literal">""</span>;
+		<span class="reserved">for</span> (t=0; t&lt; <span class="reserved">this</span>.length; t++) {
+			<span class="reserved">if</span> (t!= 0)
+				str += <span class="literal">","</span>
+			str += <span class="reserved">this</span>.data[t].toString()
+		}
+		<span class="reserved">return</span> str
+	}
+}
+<span class="comment">//Da.prototype = new Class("Da")</span>
+
+<span class="reserved">function</span> da_test(n)
+{
+	var x,y
+	var to = new da()
+
+	<span class="reserved">for</span> (x=0; x&lt; n; x++) {
+		to.ins(x,0)
+		str = to.toString()
+		alert(str)
+	}
+
+	<span class="reserved">for</span> (x=0; x &lt; n; x++) {
+		to.del(2);
+		str = to.toString()
+		alert(str)
+	}
+}
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#EEEEFF" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="index-all.html"--><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#EEEEFF" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#EEEEFF" align="right" valign="top"><em>
+<b></b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="white" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Fri Feb 19 19:00:18 2010</div>
+</body>
+</html>

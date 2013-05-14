@@ -1,0 +1,128 @@
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+        font-size:10px
+}
+h1{
+	font-size:15px; font-style: italic;
+	text-decoration: underline; 
+	display: inline; 
+}
+h2{
+	font-size:14px; 
+	display: inline; 
+}
+h3{
+	font-size:13px; 
+	display: inline; 
+}
+h4{
+	font-size:12px; 
+	display: inline; 
+}
+h5{
+	font-size:11px; 
+	display: inline; 
+}
+a{
+	color:#990000;
+}
+
+table{ 
+	font-size:11px
+}
+
+.ask_table {
+    border-collapse: collapse;
+    border-width: 0;
+    border: hidden;
+}
+
+.fileinput {
+	background-color:#33BBCC;
+    border-width: 11;
+}
+input {
+    border-width: 1;
+}
+form{
+	display:inline
+}
+.header{
+	padding-left:3px;
+	padding-right:3px;
+}
+.button{
+	border-width:1px;border-style:solid;
+	border-color: #BBBBCC; 
+	cursor: pointer; 
+	line-height: 13px; 
+}
+table{
+	background-color:#BBBBCC;
+	border-collapse: separate;
+  	border-spacing: 1px ;
+}
+tr{
+	background-color:#DDDDDD;
+}
+
+td{
+	background-color:#e6c6c6;
+}
+
+
+/*- see menu directory for more meny styles ----*/ 
+
+.tabs {
+  float:left;
+  width:100%;
+  background:#efefef;
+  font-size:93%;
+  font-color: red;
+  line-height:normal;
+  border-bottom:1px solid #666;
+}
+.tabs ul {
+    margin:0;
+    padding:10px 10px 0 50px;
+    list-style:none;
+  }
+.tabs li {
+  display:inline;
+  margin:0;
+  padding:0;
+  }
+.tabs div {
+  float:left;
+  background:url("tableft.gif") no-repeat left top;
+  margin:0;
+  padding:0 0 0 4px;
+  text-decoration:none;
+  }
+.tabs div span {
+  float:left;
+  display:block;
+  background:url("tabright.gif") no-repeat right top;
+  padding:5px 15px 4px 6px;
+  color:#eee;
+  }
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+.tabs div span {float:none;}
+/* End IE5-Mac hack */
+.tabs div:hover span {
+  color:#FFF;
+  }
+.tabs div:hover {
+  background-position:0% -42px;
+  }
+.tabs div:hover span {
+  background-position:100% -42px;
+  }
+	
+.tabs div#selected{
+  background-position:0% -42px;
+  }
+.tabs div#selected span {
+  background-position:100% -42px;
+  }
+	
